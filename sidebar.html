@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&family=Winky+Sans:ital,wght@0,300..900;1,300..900&display=swap" rel="stylesheet">
+
+    <style>
+      body { font-family: 'Robot', sans-serif; }
+      .navbar {background-color: #E5E8E8}
+      .navbar ul {
+        list-style: none;
+        padding: 5vw;
+        display: flex;
+        gap: 10px;
+      }
+      .navbar a {
+        text-decoration: none;
+        color: black;
+
+      }
+
+      .navbar a:hover {
+        color: darkblue;
+      }
+    </style>
+  </head>
+
+
+
+  <body>
+
+    <!-- Navbar for moving around -->
+    <nav class="navbar">
+      <ul>
+        <li><a id="home-nav" href="#" onclick="showView('home')" style="font-weight: bold; color: darkblue;">Home</a></li>
+        <li><a id="gemini-nav" href="#" onclick="showView('gemini')">Gemini</a></li>
+      </ul>
+    </nav>
+
+    <!-- Home view for home page -->
+    <div id="home-view">
+      <h2>Welcome to Advanced Word Analysis</h2>
+      <button onclick="google.script.run.sayHello">Click Me</button>
+    </div>
+
+    <!-- Gemini View for LLM -->
+    <div id="gemini-view" style="display: none;"> 
+        <h1> gemini will be here </h1>
+    </div>
+
+    <!-- Javascript functions -->
+    <script>
+      // function to show different views using navbar
+      function showView(viewId) {
+        document.getElementById('home-view').style.display = 'none';
+        document.getElementById('gemini-view').style.display = 'none';
+        document.getElementById('home-nav').style.cssText = 'font-weight: normal; color: black;';
+        document.getElementById('gemini-nav').style.cssText = 'font-weight: normal; color: black;';
+
+        document.getElementById(viewId + '-view').style.display = 'block';
+        document.getElementById(viewId + '-nav').style.cssText = 'font-weight: bold; color: darkblue;';
+      }
+    </script>
+  </body>
+</html>

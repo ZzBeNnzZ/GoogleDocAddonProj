@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+    <style>
+      .bar-container {
+        width: 100%;
+        background-color: #ddd;
+        border-radius: 10px;
+        margin-bottom: 15px;
+      }
+
+      .bar {
+        height: 20px;
+        border-radius: 10px;
+        text-align: right;
+        padding-right: 5px;
+        color: white;
+        line-height: 20px;
+        transition: width 0.5s;
+      }
+
+      .expected {
+        width: 50%; /* Placeholder for expected progress */
+        background-color: #8888ff;
+      }
+
+      .actual {
+        width: 30%; /* Placeholder for actual progress */
+        background-color: #66cc66;
+      }
+    </style>
+  </head>
+  <body>
+    <h2>Writing Progress</h2>
+
+    <div><strong>Expected Progress</strong></div>
+    <div class="bar-container">
+      <div class="bar expected">50%</div>
+    </div>
+
+    <div><strong>Actual Progress</strong></div>
+    <div class="bar-container">
+      <div class="bar actual">30%</div>
+    </div>
+  </body>
+</html>
