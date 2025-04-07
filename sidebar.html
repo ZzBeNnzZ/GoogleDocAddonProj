@@ -36,6 +36,7 @@
       <ul>
         <li><a id="home-nav" href="#" onclick="showView('home')" style="font-weight: bold; color: darkblue;">Home</a></li>
         <li><a id="gemini-nav" href="#" onclick="showView('gemini')">Gemini</a></li>
+        <li><a id="progress-nav" href="#" onclick="showView('progress')">progress</a></li>
       </ul>
     </nav>
 
@@ -66,9 +67,12 @@
       // function to show different views using navbar
       function showView(viewId) {
         document.getElementById('home-view').style.display = 'none';
-        document.getElementById('gemini-view').style.display = 'none';
         document.getElementById('home-nav').style.cssText = 'font-weight: normal; color: black;';
+        document.getElementById('gemini-view').style.display = 'none';
         document.getElementById('gemini-nav').style.cssText = 'font-weight: normal; color: black;';
+
+        document.getElementById('progress-view').style.display = 'none';
+        document.getElementById('progress-nav').style.cssText = 'font-weight: normal; color: black;';
 
         document.getElementById(viewId + '-view').style.display = 'block';
         document.getElementById(viewId + '-nav').style.cssText = 'font-weight: bold; color: darkblue;';
