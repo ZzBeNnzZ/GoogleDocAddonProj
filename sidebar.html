@@ -107,6 +107,9 @@
     <!-- Gemini View -->
     <div id="gemini-view" class="view">
       <h1>Deployment 1 will be here</h1>
+      <button onclick="getGeminiResponse()">Click for gemini </button>
+      <input type="text" />
+      <h1 id="geminiResponse"> </h1>
     </div>
 
     <!-- Progress View -->
@@ -118,8 +121,6 @@
   <!-- JavaScript -->
   <script>
     function showView(viewId) {
-      // Get the view to show
-      const selectedView = document.getElementById(viewId + '-view');
       
       // Update the navigation links
       const navLinks = document.querySelectorAll('.navbar a');
@@ -137,10 +138,20 @@
       });
     }
     
+    function getGeminiResponse(prompt) {
+      google.script.run
+      .withSuccessHandler(function(response){
+        document.getElementById("geminiResponse").innerHTML = response;
+      }).testGemini()
+    }
+
     // Initialize by ensuring the home view is shown first
     document.addEventListener('DOMContentLoaded', function() {
       showView('home');
     });
+
+
+
   </script>
 </body>
 
