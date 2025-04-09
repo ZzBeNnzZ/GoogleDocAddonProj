@@ -4,6 +4,7 @@ function onOpen() {
     .addItem('Say Hello', 'sayHello')
     .addItem('Say Goodbye', 'sayGoodbye')
     .addItem('Side Bar open','showSidebar')
+    .addItem('Progress Bar Open', 'showProgressBarSidebar')
     .addToUi();
 }
 
