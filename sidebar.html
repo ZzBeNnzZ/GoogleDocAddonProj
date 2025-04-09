@@ -64,11 +64,27 @@
       transform: translateY(0);
     }
 
+    .word-count-section{
+      margin-top: 10px;
+      content-justify: center;
+    }
+
+
+    .word-count-section .word-count-data{
+      padding-left: 20px;
+    }
+
+    #word-count-divider{
+      border-top: 1px dashed grey;
+      opacity: 0.7;
+    }
+
     #content-container {
       position: relative;
       min-height: 300px;
       /* padding: 20px; */
     }
+
   </style>
 </head>
 
@@ -88,20 +104,29 @@
     <div id="home-view" class="view active">
       <h2>Welcome to Advanced Word Analysis</h2>
       <button onclick="google.script.run.sayHello()">Click Me</button>
-      <table>
+      <table class="word-count-section">
         <tr>
           <td>Word Count</td>
-          <td>000</td>
+          <td class="word-count-data">000</td>
         </tr>
         <tr>
           <td>Sentence Count</td>
-          <td>000</td>
+          <td class="word-count-data">000</td>
         </tr>
+        <!-- <hr id="word-count-divider"> -->
+
         <tr>
           <td>Paragraph Count</td>
-          <td>000</td>
+          <td class="word-count-data">000</td>
+        </tr>
+
+
+        <tr >
+          <td> Section Word Count </td>
+          <td class="word-count-data"> 100 </td>
         </tr>
       </table>
+     
     </div>
 
     <!-- Gemini View -->
