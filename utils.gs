@@ -65,8 +65,7 @@ function callGeminiWithTools(prompt, tools, temperature=0) {
 
 
 
-function testGemini() {
-  const prompt = "The best thing since sliced bread is";
+function testGemini(prompt) {
   const output = callGemini(prompt);
   console.log(prompt, output);
   return output

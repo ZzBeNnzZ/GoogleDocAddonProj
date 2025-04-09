@@ -108,7 +108,7 @@
     <div id="gemini-view" class="view">
       <h1>Deployment 1 will be here</h1>
       <button onclick="getGeminiResponse()">Click for gemini </button>
-      <input type="text" />
+      <input type="text" id="geminiPrompt" name="prompt"/>
       <h1 id="geminiResponse"> </h1>
     </div>
 
@@ -138,11 +138,15 @@
       });
     }
     
-    function getGeminiResponse(prompt) {
+    function getGeminiResponse() {
+
+      const prompt = document.getElementById("geminiPrompt").value;
+      console.log("USER PROMPT: " + prompt)
+//hello
       google.script.run
       .withSuccessHandler(function(response){
         document.getElementById("geminiResponse").innerHTML = response;
-      }).testGemini()
+      }).callGemini(prompt)
     }
 
     // Initialize by ensuring the home view is shown first
