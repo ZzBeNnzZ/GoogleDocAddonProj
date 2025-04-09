@@ -141,8 +141,11 @@
     function getGeminiResponse() {
 
       const prompt = document.getElementById("geminiPrompt").value;
+      document.getElementById("geminiPrompt").value = "";
       console.log("USER PROMPT: " + prompt)
-//hello
+
+      document.getElementById("geminiResponse").innerHTML = "loading..." 
+
       google.script.run
       .withSuccessHandler(function(response){
         document.getElementById("geminiResponse").innerHTML = response;
