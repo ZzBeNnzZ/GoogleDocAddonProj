@@ -13,7 +13,7 @@
       font-family: 'Roboto', sans-serif;
       margin: 0;
       padding: 0;
-      overflow-x:hidden;
+      overflow-x: hidden;
     }
 
     .navbar {
@@ -55,7 +55,6 @@
       box-sizing: border-box;
       word-wrap: break-word;
       overflow-wrap: break-word;
-
     }
 
     .view.active {
@@ -64,10 +63,25 @@
       transform: translateY(0);
     }
 
+    .word-count-section {
+      margin-top: 10px;
+    }
+
+    #word-count-divider {
+      border-top: 1px dashed grey;
+    }
+
     #content-container {
       position: relative;
       min-height: 300px;
-      /* padding: 20px; */
+    }
+    
+    /* Simple styling for the settings form */
+    #settings-view form div {
+      margin-bottom: 8px;
+    }
+    #settings-view label {
+      margin-right: 8px;
     }
   </style>
 </head>
@@ -79,6 +93,7 @@
       <li><a id="home-nav" href="#" onclick="showView('home')" class="active">Home</a></li>
       <li><a id="gemini-nav" href="#" onclick="showView('gemini')">Gemini</a></li>
       <li><a id="progress-nav" href="#" onclick="showView('progress')">Progress</a></li>
+      <li><a id="settings-nav" href="#" onclick="showView('settings')">Settings</a></li>
     </ul>
   </nav>
 
@@ -88,7 +103,7 @@
     <div id="home-view" class="view active">
       <h2>Welcome to Advanced Word Analysis</h2>
       <button onclick="google.script.run.sayHello()">Click Me</button>
-      <table>
+      <table class="word-count-section">
         <tr>
           <td>Word Count</td>
           <td>000</td>
@@ -102,6 +117,12 @@
           <td>000</td>
         </tr>
       </table>
+      <hr id="word-count-divider">
+      <table>
+        <tr>
+          <td> Section Word Count </td>
+        </tr>
+      </table>
     </div>
 
     <!-- Gemini View -->
@@ -113,20 +134,45 @@
     <div id="progress-view" class="view">
       <h1>Progress Tracking Coming Soon</h1>
     </div>
+
+    <!-- Settings View -->
+    <div id="settings-view" class="view">
+      <h2>Settings</h2>
+      <form id="settingsForm">
+        <div>
+          <label for="displayHomeInfo">Display Home Information:</label>
+          <input type="checkbox" id="displayHomeInfo" name="displayHomeInfo">
+        </div>
+        <div>
+          <label for="sidebarWidth">Sidebar Width:</label>
+          <input type="number" id="sidebarWidth" name="sidebarWidth">
+        </div>
+        <div>
+          <label for="fontSize">Font Size:</label>
+          <input type="number" id="fontSize" name="fontSize">
+        </div>
+        <div>
+          <label for="themeColor">Theme Color:</label>
+          <select id="themeColor" name="themeColor">
+            <option value="default">Default</option>
+            <option value="dark">Dark</option>
+            <option value="light">Light</option>
+          </select>
+        </div>
+        <button type="button" onclick="saveSettings()">Save Settings</button>
+      </form>
+    </div>
   </div>
 
   <!-- JavaScript -->
   <script>
     function showView(viewId) {
-      // Get the view to show
-      const selectedView = document.getElementById(viewId + '-view');
-      
-      // Update the navigation links
+      // Update navigation links
       const navLinks = document.querySelectorAll('.navbar a');
       navLinks.forEach(link => link.classList.remove('active'));
       document.getElementById(viewId + '-nav').classList.add('active');
       
-      // Update the views
+      // Update views
       const views = document.querySelectorAll('.view');
       views.forEach(view => {
         if (view.id === viewId + '-view') {
@@ -135,14 +181,46 @@
           view.classList.remove('active');
         }
       });
+      
+      // If the Settings tab is selected, load the current settings.
+      if (viewId === 'settings') {
+        loadSettings();
+      }
     }
     
     // Initialize by ensuring the home view is shown first
     document.addEventListener('DOMContentLoaded', function() {
       showView('home');
     });
+
+    // Load settings from the server into the form
+    function loadSettings() {
+      google.script.run.withSuccessHandler(function(settings) {
+        document.getElementById('displayHomeInfo').checked = settings.displayHomeInfo;
+        document.getElementById('sidebarWidth').value = settings.sidebarWidth;
+        document.getElementById('fontSize').value = settings.fontSize;
+        document.getElementById('themeColor').value = settings.themeColor;
+      }).getSettings();
+    }
+
+    // Gather form values and save settings on the server
+    // In sidebar.html within your <script> tag
+    function saveSettings() {
+      var form = document.getElementById('settingsForm');
+      var settings = {
+        displayHomeInfo: form.displayHomeInfo.checked,
+        sidebarWidth: parseInt(form.sidebarWidth.value, 10),
+        fontSize: parseInt(form.fontSize.value, 10),
+        themeColor: form.themeColor.value
+      };
+      google.script.run.withSuccessHandler(function(message) {
+        alert(message);
+        // Optionally refresh the page to apply new settings
+        location.reload();
+      }).saveSettings(settings);
+    }
+
   </script>
 </body>
 
 </html>
-

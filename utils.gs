@@ -57,7 +57,7 @@ function callGeminiWithTools(prompt, tools, temperature=0) {
 
   const response = UrlFetchApp.fetch(geminiEndpoint, options);
   const rawText = response.getContentText();
-console.log("Raw Gemini response:", rawText);
+  console.log("Raw Gemini response:", rawText);
   const data = JSON.parse(response);
   const content = data["candidates"][0]["content"]["parts"][0]["functionCall"];
   return content;
@@ -65,10 +65,10 @@ console.log("Raw Gemini response:", rawText);
 
 
 
-function testGemini() {
-  const prompt = "The best thing since sliced bread is";
+function testGemini(prompt) {
   const output = callGemini(prompt);
   console.log(prompt, output);
+  return output
 }
 
 function testGeminiTools() {
