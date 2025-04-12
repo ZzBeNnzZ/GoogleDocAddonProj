@@ -1,187 +1,293 @@
 <!DOCTYPE html>
 <html>
 
-<head>
-  <base target="_top">
-  <!-- Load Google Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100..900&display=swap" rel="stylesheet">
+	<head>
+		<base target="_top">
+		<!-- Load Google Fonts -->
+		<link rel="preconnect" href="https://fonts.googleapis.com">
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+		<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100..900&display=swap" rel="stylesheet">
 
-  <style>
-    body {
-      font-family: 'Roboto', sans-serif;
-      margin: 0;
-      padding: 0;
-      overflow-x:hidden;
-    }
+		<style>
+		body {
+		font-family: 'Roboto', sans-serif;
+		margin: 0;
+		padding: 0;
+		overflow-x: hidden;
+		}
 
-    .navbar {
-      background-color: #E5E8E8;
-      padding: 1rem 2rem;
-    }
+		.navbar {
+		background-color: #E5E8E8;
+		padding:  1rem;
+		}
 
-    .navbar ul {
-      list-style: none;
-      margin: 0;
-      padding: 0;
-      display: flex;
-      gap: 1.5rem;
-    }
+		.navbar ul {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+		display: flex;
+		gap: 1rem;
+		}
 
-    .navbar a {
-      text-decoration: none;
-      color: black;
-      font-weight: normal;
-    }
+		.navbar a {
+		text-decoration: none;
+		color: black;
+		font-weight: normal;
+		}
 
-    .navbar a:hover {
-      color: darkblue;
-    }
+		.navbar a:hover {
+		color: darkblue;
+		}
 
-    .navbar a.active {
-      font-weight: bold;
-      color: darkblue;
-    }
+		.navbar a.active {
+		font-weight: bold;
+		color: darkblue;
+		}
 
-    .view {
-      position: absolute;
-      padding: 10px;
-      width: 100%;
-      opacity: 0;
-      pointer-events: none;
-      transform: translateY(10px);
-      transition: opacity 0.3s ease, transform 0.3s ease;
-      box-sizing: border-box;
-      word-wrap: break-word;
-      overflow-wrap: break-word;
+		.view {
+		position: absolute;
+		padding: 10px;
+		width: 100%;
+		opacity: 0;
+		pointer-events: none;
+		transform: translateY(10px);
+		transition: opacity 0.3s ease, transform 0.3s ease;
+		box-sizing: border-box;
+		word-wrap: break-word;
+		overflow-wrap: break-word;
+		}
 
-    }
+		.view.active {
+		opacity: 1;
+		pointer-events: auto;
+		transform: translateY(0);
+		}
 
-    .view.active {
-      opacity: 1;
-      pointer-events: auto;
-      transform: translateY(0);
-    }
+		.word-count-section{
+		margin-top: 10px;
+		content-justify: center;
+		}
 
-    #content-container {
-      position: relative;
-      min-height: 300px;
-      /* padding: 20px; */
-    }
 
-    .bar-container {
-        width: 100%;
-        background-color: #ddd;
-        border-radius: 10px;
-        margin-bottom: 15px;
-      }
+		.word-count-section .word-count-data{
+		padding-left: 20px;
+		}
 
-      .bar {
-        height: 20px;
-        border-radius: 10px;
-        text-align: right;
-        padding-right: 5px;
-        color: white;
-        line-height: 20px;
-        transition: width 0.5s;
-      }
+		#word-count-divider{
+		border-top: 1px dashed grey;
+		opacity: 0.7;
+		}
 
-      .expected {
-        width: 50%; /* Placeholder for expected progress */
-        background-color: #8888ff;
-      }
+		#content-container {
+		position: relative;
+		min-height: 300px;
+		}
 
-      .actual {
-        width: 30%; /* Placeholder for actual progress */
-        background-color: #66cc66;
-      }
-  </style>
-</head>
+		.bar-container {
+		width: 100%;
+		background-color: #ddd;
+		border-radius: 10px;
+		margin-bottom: 15px;
+		}
 
-<body>
-  <!-- Navigation Bar -->
-  <nav class="navbar">
-    <ul>
-      <li><a id="home-nav" href="#" onclick="showView('home')" class="active">Home</a></li>
-      <li><a id="gemini-nav" href="#" onclick="showView('gemini')">Gemini</a></li>
-      <li><a id="progress-nav" href="#" onclick="showView('progress')">Progress</a></li>
-    </ul>
-  </nav>
+		.bar {
+		height: 20px;
+		border-radius: 10px;
+		text-align: right;
+		padding-right: 5px;
+		color: white;
+		line-height: 20px;
+		transition: width 0.5s;
+		}
 
-  <!-- Content Container -->
-  <div id="content-container">
-    <!-- Home View -->
-    <div id="home-view" class="view active">
-      <h2>Welcome to Advanced Word Analysis</h2>
-      <button onclick="google.script.run.sayHello()">Click Me</button>
-      <table>
-        <tr>
-          <td>Word Count</td>
-          <td>000</td>
-        </tr>
-        <tr>
-          <td>Sentence Count</td>
-          <td>000</td>
-        </tr>
-        <tr>
-          <td>Paragraph Count</td>
-          <td>000</td>
-        </tr>
-      </table>
-    </div>
+		.expected {
+		width: 50%; /* Placeholder for expected progress */
+		background-color: #8888ff;
+		}
 
-    <!-- Gemini View -->
-    <div id="gemini-view" class="view">
-      <h1>Deployment 1 will be here</h1>
-    </div>
+		.actual {
+		width: 30%; /* Placeholder for actual progress */
+		background-color: #66cc66;
+		}
 
-    <!-- Progress View -->
-    <div id="progress-view" class="view">
-      <body>
-        <h2>Writing Progress</h2>
-    
-        <div><strong>Expected Progress</strong></div>
-        <div class="bar-container">
-          <div class="bar expected">50%</div>
-        </div>
-    
-        <div><strong>Actual Progress</strong></div>
-        <div class="bar-container">
-          <div class="bar actual">30%</div>
-        </div>
-      </body>
-    </div>
-  </div>
+		/* Simple styling for the settings form */
+		#settings-view form div {
+		margin-bottom: 8px;
+		}
+		#settings-view label {
+		margin-right: 8px;
+		}
 
-  <!-- JavaScript -->
-  <script>
-    function showView(viewId) {
-      // Get the view to show
-      const selectedView = document.getElementById(viewId + '-view');
-      
-      // Update the navigation links
-      const navLinks = document.querySelectorAll('.navbar a');
-      navLinks.forEach(link => link.classList.remove('active'));
-      document.getElementById(viewId + '-nav').classList.add('active');
-      
-      // Update the views
-      const views = document.querySelectorAll('.view');
-      views.forEach(view => {
-        if (view.id === viewId + '-view') {
-          view.classList.add('active');
-        } else {
-          view.classList.remove('active');
-        }
-      });
-    }
-    
-    // Initialize by ensuring the home view is shown first
-    document.addEventListener('DOMContentLoaded', function() {
-      showView('home');
-    });
-  </script>
-</body>
+		</style>
+	</head>
+
+	<body>
+		<!-- Navigation Bar -->
+		<nav class="navbar">
+			<ul>
+				<li><a id="home-nav" href="#" onclick="showView('home')" class="active">Home</a></li>
+				<li><a id="gemini-nav" href="#" onclick="showView('gemini')">Gemini</a></li>
+				<li><a id="progress-nav" href="#" onclick="showView('progress')">Progress</a></li>
+				<li><a id="settings-nav" href="#" onclick="showView('settings')">Settings</a></li>
+			</ul>
+		</nav>
+
+		<!-- Content Container -->
+		<div id="content-container">
+			<!-- Home View -->
+			<div id="home-view" class="view active">
+				<h2>Welcome to Advanced Word Analysis</h2>
+				<button onclick="google.script.run.sayHello()">Click Me</button>
+				<table class="word-count-section">
+					<tr>
+						<td>Word Count</td>
+						<td class="word-count-data">000</td>
+					</tr>
+					<tr>
+						<td>Sentence Count</td>
+						<td class="word-count-data">000</td>
+					</tr>
+					<!-- <hr id="word-count-divider"> -->
+
+					<tr>
+						<td>Paragraph Count</td>
+						<td class="word-count-data">000</td>
+					</tr>
+
+
+					<tr >
+						<td> Section Word Count </td>
+						<td class="word-count-data"> 100 </td>
+					</tr>
+				</table>
+			</div>
+
+			<!-- Gemini View -->
+			<div id="gemini-view" class="view">
+				<h1>Gemini Implementation</h1>
+				<button onclick="getGeminiResponse()">Click for gemini </button>
+				<input type="text" id="geminiPrompt" name="prompt"/>
+				<h1 id="geminiResponse"> </h1>
+			</div>
+
+			<!-- Progress View -->
+			<div id="progress-view" class="view">
+				<body>
+					<h2>Writing Progress</h2>
+
+					<div><strong>Expected Progress</strong></div>
+					<div class="bar-container">
+						<div class="bar expected">50%</div>
+					</div>
+
+					<div><strong>Actual Progress</strong></div>
+					<div class="bar-container">
+						<div class="bar actual">30%</div>
+					</div>
+				</body>
+			</div>
+
+			<!-- Settings View -->
+			<div id="settings-view" class="view">
+				<h2>Settings</h2>
+				<form id="settingsForm">
+					<div>
+						<label for="displayHomeInfo">Display Home Information:</label>
+						<input type="checkbox" id="displayHomeInfo" name="displayHomeInfo">
+					</div>
+					<div>
+						<label for="sidebarWidth">Sidebar Width:</label>
+						<input type="number" id="sidebarWidth" name="sidebarWidth">
+					</div>
+					<div>
+						<label for="fontSize">Font Size:</label>
+						<input type="number" id="fontSize" name="fontSize">
+					</div>
+					<div>
+						<label for="themeColor">Theme Color:</label>
+						<select id="themeColor" name="themeColor">
+							<option value="default">Default</option>
+							<option value="dark">Dark</option>
+							<option value="light">Light</option>
+						</select>
+					</div>
+					<button type="button" onclick="saveSettings()">Save Settings</button>
+				</form>
+			</div>
+		</div>
+
+		<!-- JavaScript -->
+		<script>
+		function showView(viewId) {
+			// Update navigation links
+			const navLinks = document.querySelectorAll('.navbar a');
+			navLinks.forEach(link => link.classList.remove('active'));
+			document.getElementById(viewId + '-nav').classList.add('active');
+
+			// Update views
+			const views = document.querySelectorAll('.view');
+			views.forEach(view => {
+				if (view.id === viewId + '-view') {
+					view.classList.add('active');
+				} else {
+					view.classList.remove('active');
+				}
+			});
+
+			// If the Settings tab is selected, load the current settings.
+			if (viewId === 'settings') {
+				loadSettings();
+			}
+		}
+
+		function getGeminiResponse() {
+
+			const prompt = document.getElementById("geminiPrompt").value;
+			document.getElementById("geminiPrompt").value = "";
+			console.log("USER PROMPT: " + prompt)
+
+			document.getElementById("geminiResponse").innerHTML = "loading..." 
+
+			google.script.run
+				.withSuccessHandler(function(response){
+					document.getElementById("geminiResponse").innerHTML = response;
+				}).callGemini(prompt)
+		}
+
+		// Initialize by ensuring the home view is shown first
+		document.addEventListener('DOMContentLoaded', function() {
+			showView('home');
+		});
+
+
+		// Load settings from the server into the form
+		function loadSettings() {
+			google.script.run.withSuccessHandler(function(settings) {
+				document.getElementById('displayHomeInfo').checked = settings.displayHomeInfo;
+				document.getElementById('sidebarWidth').value = settings.sidebarWidth;
+				document.getElementById('fontSize').value = settings.fontSize;
+				document.getElementById('themeColor').value = settings.themeColor;
+			}).getSettings();
+		}
+
+		// Gather form values and save settings on the server
+		// In sidebar.html within your <script> tag
+		function saveSettings() {
+			var form = document.getElementById('settingsForm');
+			var settings = {
+				displayHomeInfo: form.displayHomeInfo.checked,
+				sidebarWidth: parseInt(form.sidebarWidth.value, 10),
+				fontSize: parseInt(form.fontSize.value, 10),
+				themeColor: form.themeColor.value
+			};
+			google.script.run.withSuccessHandler(function(message) {
+				alert(message);
+				// Optionally refresh the page to apply new settings
+				location.reload();
+			}).saveSettings(settings);
+		}
+
+		</script>
+	</body>
 
 </html>
-
