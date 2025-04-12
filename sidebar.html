@@ -165,12 +165,15 @@
 			<!-- Gemini View -->
 			<div id="gemini-view" class="view">
 				<h1>Gemini Implementation</h1>
-				<input type="text" id="geminiPrompt" name="prompt"/>
+        <div>
 				<button onclick="#">Proofread</button>
 				<button onclick="#">Summarize</button>
 				<button onclick="#">Make Friendly</button>
 				<button onclick="#">Make Profressional</button>
 				<button onclick="#">Make Concise</button>
+        </div>
+        <br>
+        <input type="text" id="geminiPrompt" name="prompt"/>
 				<button onclick="getGeminiResponse()">Click to prompt</button>
 				<h1 id="geminiResponse"> </h1>
 			</div>
