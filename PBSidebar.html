@@ -44,19 +44,24 @@
     <div class="bar-container">
       <div class="bar actual" id="actualBar">0%</div>
     </div>
+
+    <button class="update-btn" onclick="updateProgress()">Update Progress</button>
+
     <script>
       function updateProgress() {
+        DocumentApp.getUi().alert("Updating Progress");
         google.script.run.withSuccessHandler(function(data) {
           const actualBar = document.getElementById("actualBar");
-          const percent = Math.round(data.percent);
+          //const percent = Math.round(data.percent);
+          percent = 30;
     
           actualBar.style.width = percent + "%";
           actualBar.textContent = percent + "%";
         }).getProgressData();
       }
 
-      setInterval(updateProgress, 5000);
-      updateProgress();
+      //setInterval(updateProgress, 5000);
+      //updateProgress();
     </script>
 
   </body>

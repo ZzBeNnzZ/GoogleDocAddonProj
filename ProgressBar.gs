@@ -19,3 +19,9 @@ function getProgressData() {
   const percent = Math.min((current / maxWords) * 100, 100);
   return { current, percent };
 }
+
+function showUpdateAlert() {
+  var ui = DocumentApp.getUi();
+  ui.alert("Progress has been updated!");
+}
+
