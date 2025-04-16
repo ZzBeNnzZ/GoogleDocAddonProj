@@ -21,27 +21,43 @@
       }
 
       .expected {
-        width: 50%; /* Placeholder for expected progress */
+        /*width: 50%; /* Placeholder for expected progress */
         background-color: #8888ff;
       }
 
       .actual {
-        width: 30%; /* Placeholder for actual progress */
+        /*width: 30%; /* Placeholder for actual progress */
         background-color: #66cc66;
       }
     </style>
   </head>
   <body>
+    
     <h2>Writing Progress</h2>
 
     <div><strong>Expected Progress</strong></div>
     <div class="bar-container">
-      <div class="bar expected">50%</div>
+      <div class="bar expected" id="expectedBar">50%</div>
     </div>
 
     <div><strong>Actual Progress</strong></div>
     <div class="bar-container">
-      <div class="bar actual">30%</div>
+      <div class="bar actual" id="actualBar">0%</div>
     </div>
+    <script>
+      function updateProgress() {
+        google.script.run.withSuccessHandler(function(data) {
+          const actualBar = document.getElementById("actualBar");
+          const percent = Math.round(data.percent);
+    
+          actualBar.style.width = percent + "%";
+          actualBar.textContent = percent + "%";
+        }).getProgressData();
+      }
+
+      setInterval(updateProgress, 5000);
+      updateProgress();
+    </script>
+
   </body>
 </html>
