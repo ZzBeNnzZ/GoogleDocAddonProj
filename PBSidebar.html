@@ -49,15 +49,16 @@
 
     <script>
       function updateProgress() {
-        DocumentApp.getUi().alert("Updating Progress");
-        google.script.run.withSuccessHandler(function(data) {
+        google.script.run.callAlert();
+        /*google.script.run.withSuccessHandler(function(data) {
+         
           const actualBar = document.getElementById("actualBar");
           //const percent = Math.round(data.percent);
           percent = 30;
     
           actualBar.style.width = percent + "%";
           actualBar.textContent = percent + "%";
-        }).getProgressData();
+        }).getProgressData();*/
       }
 
       //setInterval(updateProgress, 5000);

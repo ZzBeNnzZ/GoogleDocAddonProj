@@ -20,8 +20,7 @@ function getProgressData() {
   return { current, percent };
 }
 
-function showUpdateAlert() {
-  var ui = DocumentApp.getUi();
-  ui.alert("Progress has been updated!");
+function callAlert() {
+  DocumentApp.getUi().alert("Updating Progress");
 }
 
