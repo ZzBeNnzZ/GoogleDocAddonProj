@@ -21,6 +21,8 @@ function getProgressData() {
 }
 
 function callAlert() {
+  Logger.log("callAlert function being triggered");
   DocumentApp.getUi().alert("Updating Progress");
+  
 }
 
