@@ -120,7 +120,6 @@
     #settings-view label {
       margin-right: 8px;
     }
-
   </style>
 </head>
 
@@ -153,6 +152,28 @@
         <tr>
           <td>Paragraph&nbsp;Count</td>
           <td id="totalParagraphs" class="word-count-data">0</td>
+        </tr>
+
+        <tr>
+          <td id="word-count-divider" colspan="2"></td>
+        </tr>
+        <tr>
+          <td>Selected Words</td>
+          <td id="selectWords" class="word-count-data">0</td>
+        </tr>
+        <tr>
+          <td>Selected Sentences</td>
+          <td id="selectSentence" class="word-count-data">0</td>
+        </tr>
+        <tr>
+          <td>Selected Paragraphs</td>
+          <td id="selectParagraph" class="word-count-data">0</td>
+        </tr>
+
+        <tr>
+          <td colspan="2" style="text-align:center">
+            <button onclick="refreshSelectionStats()">Count Selection</button>
+          </td>
         </tr>
 
         <!-- Dynamically‑generated section rows will land down here -->
@@ -337,6 +358,15 @@
           tbody.append(tr);
         })
       }).countWordsBySmartSections();
+    }
+
+
+    function refreshSelectionStats(){
+      google.script.run.withSuccessHandler(stats => {
+        document.getElementById("selectWords").textContent = stats.wordCount;
+        document.getElementById("selectSentence").textContent = stats.sentenceCount;
+        document.getElementById("selectParagraph").textContent = stats.paragraphCount;
+      }).countWordsSelected();
     }
 
 
