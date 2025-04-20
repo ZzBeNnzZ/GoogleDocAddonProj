@@ -166,11 +166,10 @@
 			<div id="gemini-view" class="view">
 				<h1>Gemini Implementation</h1>
         <div>
-				<button onclick="#">Proofread</button>
-				<button onclick="#">Summarize</button>
-				<button onclick="#">Make Friendly</button>
-				<button onclick="#">Make Profressional</button>
-				<button onclick="#">Make Concise</button>
+				<button onclick="runWritingTool('summarize')">Summarize</button>
+				<button onclick="runWritingTool('friendly')">Make Friendly</button>
+				<button onclick="runWritingTool('professional')">Make Profressional</button>
+				<button onclick="runWritingTool('concise')">Make Concise</button>
         </div>
         <br>
         <input type="text" id="geminiPrompt" name="prompt"/>
@@ -266,6 +265,13 @@
 		document.addEventListener('DOMContentLoaded', function() {
 			showView('home');
 		});
+
+    function runWritingTool(tool){
+        google.script.run
+          .withSuccessHandler(function(text){
+            console.log(text[0])
+          }).getSelectedText()
+    }
 
 
 		// Load settings from the server into the form

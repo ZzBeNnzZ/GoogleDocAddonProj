@@ -2,6 +2,38 @@ const properties = PropertiesService.getScriptProperties().getProperties();
 const geminiApiKey = properties['GOOGLE_API_KEY'];
 const geminiEndpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${geminiApiKey}`;
 
+// get user selected text
+function getSelectedText() {
+  const selection = DocumentApp.getActiveDocument().getSelection();
+  const text = [];
+  if (selection) {
+    const elements = selection.getSelectedElements();
+    for (let i = 0; i < elements.length; ++i) {
+      if (elements[i].isPartial()) {
+        const element = elements[i].getElement().asText();
+        const startIndex = elements[i].getStartOffset();
+        const endIndex = elements[i].getEndOffsetInclusive();
+
+        text.push(element.getText().substring(startIndex, endIndex + 1));
+      } else {
+        const element = elements[i].getElement();
+        // Only translate elements that can be edited as text; skip images and
+        // other non-text elements.
+        if (element.editAsText) {
+          const elementText = element.asText().getText();
+          // This check is necessary to exclude images, which return a blank
+          // text element.
+          if (elementText) {
+            text.push(elementText);
+          }
+        }
+      }
+    }
+  }
+  if (!text.length) throw new Error('Please select some text.');
+  return text;
+}
+
 // BASIC PROMPT CALLING
 function callGemini(prompt, temperature=0) {
   const payload = {
