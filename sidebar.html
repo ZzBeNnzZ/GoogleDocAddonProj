@@ -227,14 +227,24 @@
 		<!-- JavaScript -->
 		<script>
 
+    window.onload = function() {
+      getWordCount();
+      getSentenceCount();
+      getP
+    }
+
     function getWordCount() {
+      console.log("Word counter");
       google.script.run.withSuccessHandler(function(count) {
           document.getElementById("wordCount").innerText = count;
+          console.log("Word count: "+count);
         }).wordCount();
     }
     function getSentenceCount() {
+      
       google.script.run.withSuccessHandler(function(count) {
           document.getElementById("sentenceCount").innerText = count;
+          console.log("Sentence count: "+count);
         }).sentenceCount();
     }
     function getParagraphCount() {
