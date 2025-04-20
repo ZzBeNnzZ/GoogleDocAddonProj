@@ -1,25 +1,34 @@
 <!DOCTYPE html>
 <html>
 
-	<head>
-		<base target="_top">
-		<!-- Load Google Fonts -->
-		<link rel="preconnect" href="https://fonts.googleapis.com">
-		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-		<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100..900&display=swap" rel="stylesheet">
 
-		<style>
-		body {
-		font-family: 'Roboto', sans-serif;
-		margin: 0;
-		padding: 0;
-		overflow-x: hidden;
-		}
+<head>
+  <base target="_top">
+  <!-- Load Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100..900&display=swap" rel="stylesheet">
 
-		.navbar {
-		background-color: #E5E8E8;
-		padding:  1rem;
-		}
+  <style>
+    body {
+      font-family: 'Roboto', sans-serif;
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden;
+    }
+
+    .navbar {
+      background-color: #E5E8E8;
+      padding: 1rem;
+    }
+
+    .navbar ul {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      gap: 1rem;
+    }
 
 		.navbar ul {
 		list-style: none;
@@ -39,7 +48,21 @@
 		color: darkblue;
 		}
 
-		.navbar a.active {
+
+    .view {
+      position: absolute;
+      padding: 10px;
+      width: 100%;
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(10px);
+      transition: opacity 0.3s ease, transform 0.3s ease;
+      box-sizing: border-box;
+      word-wrap: break-word;
+      overflow-wrap: break-word;
+    }
+
+/* 		.navbar a.active {
 		font-weight: bold;
 		color: darkblue;
 		}
@@ -55,13 +78,15 @@
 		box-sizing: border-box;
 		word-wrap: break-word;
 		overflow-wrap: break-word;
-		}
+		} */
+
 
 		.view.active {
 		opacity: 1;
 		pointer-events: auto;
 		transform: translateY(0);
 		}
+
 
 		.word-count-section{
 		margin-top: 10px;
@@ -78,73 +103,103 @@
 		opacity: 0.7;
 		}
 
+
 		#content-container {
 		position: relative;
 		min-height: 300px;
 		}
 
-		.bar-container {
-		width: 100%;
-		background-color: #ddd;
-		border-radius: 10px;
-		margin-bottom: 15px;
-		}
 
-		.bar {
-		height: 20px;
-		border-radius: 10px;
-		text-align: right;
-		padding-right: 5px;
-		color: white;
-		line-height: 20px;
-		transition: width 0.5s;
-		}
+    .word-count-section .word-count-data {
+      padding-left: 20px;
+    }
 
-		.expected {
-		width: 50%; /* Placeholder for expected progress */
-		background-color: #8888ff;
-		}
+    #word-count-divider {
+      border-top: 1px dashed grey;
+      opacity: 0.7;
+    }
 
-		.actual {
-		width: 30%; /* Placeholder for actual progress */
-		background-color: #66cc66;
-		}
+    #content-container {
+      position: relative;
+      min-height: 300px;
+    }
 
-    .tooltip {
+    .bar-container {
+      width: 100%;
+      background-color: #ddd;
+      border-radius: 10px;
+      margin-bottom: 15px;
+    }
+
+    .bar {
+      height: 20px;
+      border-radius: 10px;
+      text-align: right;
+      padding-right: 5px;
+      color: white;
+      line-height: 20px;
+      transition: width 0.5s;
+    }
+
+    .expected {
+      width: 50%;
+      /* Placeholder for expected progress */
+      background-color: #8888ff;
+    }
+
+    .actual {
+      width: 30%;
+      /* Placeholder for actual progress */
+      background-color: #66cc66;
+    }
+    
+     .tooltip {
         color: grey;
         font-size: 12px;
     }
 
-		/* Simple styling for the settings form */
-		#settings-view form div {
-		margin-bottom: 8px;
-		}
-		#settings-view label {
-		margin-right: 8px;
-		}
+    /* Simple styling for the settings form */
+    #settings-view form div {
+      margin-bottom: 8px;
+    }
 
-		</style>
-	</head>
+    #settings-view label {
+      margin-right: 8px;
+    }
+  </style>
+</head>
 
-	<body>
-		<!-- Navigation Bar -->
-		<nav class="navbar">
-			<ul>
-				<li><a id="home-nav" href="#" onclick="showView('home')" class="active">Home</a></li>
-				<li><a id="gemini-nav" href="#" onclick="showView('gemini')">Gemini</a></li>
-				<li><a id="progress-nav" href="#" onclick="showView('progress')">Progress</a></li>
-				<li><a id="settings-nav" href="#" onclick="showView('settings')">Settings</a></li>
-			</ul>
-		</nav>
+<body>
+  <!-- Navigation Bar -->
+  <nav class="navbar">
+    <ul>
+      <li><a id="home-nav" href="#" onclick="showView('home')" class="active">Home</a></li>
+      <li><a id="gemini-nav" href="#" onclick="showView('gemini')">Gemini</a></li>
+      <li><a id="progress-nav" href="#" onclick="showView('progress')">Progress</a></li>
+      <li><a id="settings-nav" href="#" onclick="showView('settings')">Settings</a></li>
+    </ul>
+  </nav>
 
-		<!-- Content Container -->
-		<div id="content-container">
-			<!-- Home View -->
-			<div id="home-view" class="view active">
-				<h2>Welcome to Advanced Word Analysis</h2>
-				<button onclick="google.script.run.sayHello()">Click Me</button>
-				<table class="word-count-section">
-					<tr>
+  <!-- Content Container -->
+  <div id="content-container">
+    <!-- Home View -->
+    <div id="home-view" class="view active">
+      <h2>Welcome to Advanced Word Analysis</h2>
+      <button onclick="google.script.run.sayHello()">Click Me</button>
+      <table class="word-count-section">
+<!--         <tr>
+          <td>Word&nbsp;Count</td>
+          <td id="totalWords" class="word-count-data">0</td>
+        </tr>
+        <tr>
+          <td>Sentence&nbsp;Count</td>
+          <td id="totalSentences" class="word-count-data">0</td>
+        </tr>
+        <tr>
+          <td>Paragraph&nbsp;Count</td>
+          <td id="totalParagraphs" class="word-count-data">0</td>
+        </tr> -->
+        <tr>
 						<td>Word Count</td>
 						<td class="word-count-data" id="wordCount">Loading...</td>
 					</tr>
@@ -159,91 +214,110 @@
 						<td class="word-count-data" id="paragraphCount">Loading...</td>
 					</tr>
 
-
-					<tr >
-						<td> Section Word Count </td>
-						<td class="word-count-data"> Loading... </td>
-					</tr>
-
           <tr>
 						<td>Most Reused Word</td>
 						<td class="word-count-data" id="reusedWord">Loading...</td>
 					</tr>
-				</table>
 
-        <p class="tooltip">
+        <tr>
+          <td id="word-count-divider" colspan="2"></td>
+        </tr>
+        <tr>
+          <td>Selected Words</td>
+          <td id="selectWords" class="word-count-data">0</td>
+        </tr>
+        <tr>
+          <td>Selected Sentences</td>
+          <td id="selectSentence" class="word-count-data">0</td>
+        </tr>
+        <tr>
+          <td>Selected Paragraphs</td>
+          <td id="selectParagraph" class="word-count-data">0</td>
+        </tr>
+
+        <tr>
+          <td colspan="2" style="text-align:center">
+            <button onclick="refreshSelectionStats()">Count Selection</button>
+          </td>
+        </tr>
+
+        <!-- Dynamically‑generated section rows will land down here -->
+        <tbody id="sectionRows"></tbody>
+      </table>
+      
+      <p class="tooltip">
           *Sentence count based on text blocks that end with any of . ? or !. Section headers not counted.<br><br>
           **Paragraph count based on text blocks bounded by whitespace. Section headers not counted.
 
         </p>
-			</div>
+    </div>
 
-			<!-- Gemini View -->
-			<div id="gemini-view" class="view">
-				<h1>Gemini Implementation</h1>
-        <div>
-				<button onclick="#">Proofread</button>
-				<button onclick="#">Summarize</button>
-				<button onclick="#">Make Friendly</button>
-				<button onclick="#">Make Profressional</button>
-				<button onclick="#">Make Concise</button>
+    <!-- Gemini View -->
+    <div id="gemini-view" class="view">
+      <h1>Gemini Implementation</h1>
+      <div>
+        <button onclick="#">Proofread</button>
+        <button onclick="#">Summarize</button>
+        <button onclick="#">Make Friendly</button>
+        <button onclick="#">Make Profressional</button>
+        <button onclick="#">Make Concise</button>
+      </div>
+      <br>
+      <input type="text" id="geminiPrompt" name="prompt"/>
+      <button onclick="getGeminiResponse()">Click to prompt</button>
+      <h1 id="geminiResponse"> </h1>
+    </div>
+
+    <!-- Progress View -->
+    <div id="progress-view" class="view">
+
+      <div>
+        <h2>Writing Progress</h2>
+
+        <div><strong>Expected Progress</strong></div>
+        <div class="bar-container">
+          <div class="bar expected">50%</div>
         </div>
-        <br>
-        <input type="text" id="geminiPrompt" name="prompt"/>
-				<button onclick="getGeminiResponse()">Click to prompt</button>
-				<h1 id="geminiResponse"> </h1>
-			</div>
 
-			<!-- Progress View -->
-			<div id="progress-view" class="view">
-				<body>
-					<h2>Writing Progress</h2>
+        <div><strong>Actual Progress</strong></div>
+        <div class="bar-container">
+          <div class="bar actual">30%</div>
+        </div>
+</body>
+</div>
 
-					<div><strong>Expected Progress</strong></div>
-					<div class="bar-container">
-						<div class="bar expected">50%</div>
-					</div>
-
-					<div><strong>Actual Progress</strong></div>
-					<div class="bar-container">
-						<div class="bar actual">30%</div>
-					</div>
-				</body>
-			</div>
-
-			<!-- Settings View -->
-			<div id="settings-view" class="view">
-				<h2>Settings</h2>
-				<form id="settingsForm">
-					<div>
-						<label for="displayHomeInfo">Display Home Information:</label>
-						<input type="checkbox" id="displayHomeInfo" name="displayHomeInfo">
-					</div>
-					<div>
-						<label for="sidebarWidth">Sidebar Width:</label>
-						<input type="number" id="sidebarWidth" name="sidebarWidth">
-					</div>
-					<div>
-						<label for="fontSize">Font Size:</label>
-						<input type="number" id="fontSize" name="fontSize">
-					</div>
-					<div>
-						<label for="themeColor">Theme Color:</label>
-						<select id="themeColor" name="themeColor">
+<!-- Settings View -->
+<div id="settings-view" class="view">
+  <h2>Settings</h2>
+  <form id="settingsForm">
+    <div>
+      <label for="displayHomeInfo">Display Home Information:</label>
+      <input type="checkbox" id="displayHomeInfo" name="displayHomeInfo">
+    </div>
+    <div>
+      <label for="sidebarWidth">Sidebar Width:</label>
+      <input type="number" id="sidebarWidth" name="sidebarWidth">
+    </div>
+    <div>
+      <label for="fontSize">Font Size:</label>
+      <input type="number" id="fontSize" name="fontSize">
+    </div>
+    <div>
+      <label for="themeColor">Theme Color:</label>
+      <select id="themeColor" name="themeColor">
 							<option value="default">Default</option>
 							<option value="dark">Dark</option>
 							<option value="light">Light</option>
 						</select>
-					</div>
-					<button type="button" onclick="saveSettings()">Save Settings</button>
-				</form>
-			</div>
-		</div>
+    </div>
+    <button type="button" onclick="saveSettings()">Save Settings</button>
+  </form>
+</div>
+</div>
 
-		<!-- JavaScript -->
-		<script>
-
-    window.onload = function() {
+<!-- JavaScript -->
+<script>
+  window.onload = function() {
       getWordCount();
       getSentenceCount();
       getParagraphCount();
@@ -275,7 +349,7 @@
           document.getElementById("paragraphCount").innerText = count;
         }).paragraphCount();
     }
-		function showView(viewId) {
+  function showView(viewId) {
 			// Update navigation links
 			const navLinks = document.querySelectorAll('.navbar a');
 			navLinks.forEach(link => link.classList.remove('active'));
@@ -295,6 +369,9 @@
 			if (viewId === 'settings') {
 				loadSettings();
 			}
+      if(viewId === 'home'){
+        refreshWordStats();
+      }
 		}
 
 		function getGeminiResponse() {
@@ -311,10 +388,6 @@
 				}).callGemini(prompt)
 		}
 
-		// Initialize by ensuring the home view is shown first
-		document.addEventListener('DOMContentLoaded', function() {
-			showView('home');
-		});
 
 
 		// Load settings from the server into the form
@@ -344,7 +417,70 @@
 			}).saveSettings(settings);
 		}
 
-		</script>
-	</body>
+    //------------------UPDATE HOME and SECTION DATA---------------------
+    function refreshWordStats(){
+
+      // console.log("HELLOOOOO WORLDS");
+      //Update overal counts 
+      google.script.run.withSuccessHandler(function (stats) {
+      document.getElementById('totalWords').textContent      = stats.wordCount;
+      document.getElementById('totalSentences').textContent  = stats.sentenceCount;
+      document.getElementById('totalParagraphs').textContent = stats.paragraphCount;
+      }).getDocumentStats();
+
+      //Count for each section detected in the google doc 
+      google.script.run.withSuccessHandler(function(sections) {
+        // console.log("HELLOOOOO WORLDS 2");
+
+        const tbody = document.getElementById("sectionRows");
+        tbody.innerHTML= ``;
+        const tr_heading = document.createElement('tr');
+        tr_heading.innerHTML = `
+        <th> Section title</th>
+        <th> Word Count </th>
+        `;
+        tbody.append(tr_heading);
+
+        
+        sections.forEach(({title, wordCount}) => {
+          // convert undefined / null to '' and trim whitespace
+          const cleanTitle = (title ?? '').trim();
+          const cleanCount = (wordCount ?? '').toString().trim();
+
+          // skip rows that have *no* useful content
+          if (!cleanTitle || !cleanCount) return;
+
+          const tr = document.createElement('tr');
+          tr.innerHTML = `
+          <td>${title}</td>
+          <td class = "word-count-data">${wordCount}</td>`;
+
+          console.log(`Section: ${title} and ${wordCount}`)
+          
+
+          tbody.append(tr);
+        })
+      }).countWordsBySmartSections();
+    }
+
+
+    function refreshSelectionStats(){
+      google.script.run.withSuccessHandler(stats => {
+        document.getElementById("selectWords").textContent = stats.wordCount;
+        document.getElementById("selectSentence").textContent = stats.sentenceCount;
+        document.getElementById("selectParagraph").textContent = stats.paragraphCount;
+      }).countWordsSelected();
+    }
+
+
+    
+		// Initialize by ensuring the home view is shown first
+		document.addEventListener('DOMContentLoaded', function() {
+			showView('home');
+      refreshWordStats();
+		});
+</script>
+</body>
 
 </html>
+

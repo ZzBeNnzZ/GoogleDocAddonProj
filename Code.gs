@@ -18,7 +18,9 @@ function sayGoodbye() {
 
 function showSidebar() {
   var settings = Settings.getSettings(); // Get stored settings
+
   var width = settings.sidebarWidth || 300; // Fallback to 300 if not defined
+
   const html = HtmlService.createHtmlOutputFromFile('sidebar')
     .setTitle('My Custom UI')
     .setWidth(width);
