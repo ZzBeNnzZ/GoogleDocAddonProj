@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 
+
 <head>
   <base target="_top">
   <!-- Load Google Fonts -->
@@ -29,20 +30,24 @@
       gap: 1rem;
     }
 
-    .navbar a {
-      text-decoration: none;
-      color: black;
-      font-weight: normal;
-    }
+		.navbar ul {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+		display: flex;
+		gap: 1rem;
+		}
 
-    .navbar a:hover {
-      color: darkblue;
-    }
+		.navbar a {
+		text-decoration: none;
+		color: black;
+		font-weight: normal;
+		}
 
-    .navbar a.active {
-      font-weight: bold;
-      color: darkblue;
-    }
+		.navbar a:hover {
+		color: darkblue;
+		}
+
 
     .view {
       position: absolute;
@@ -57,16 +62,52 @@
       overflow-wrap: break-word;
     }
 
-    .view.active {
-      opacity: 1;
-      pointer-events: auto;
-      transform: translateY(0);
-    }
+/* 		.navbar a.active {
+		font-weight: bold;
+		color: darkblue;
+		}
 
-    .word-count-section {
-      margin-top: 10px;
-      content-justify: center;
-    }
+		.view {
+		position: absolute;
+		padding: 10px;
+		width: 100%;
+		opacity: 0;
+		pointer-events: none;
+		transform: translateY(10px);
+		transition: opacity 0.3s ease, transform 0.3s ease;
+		box-sizing: border-box;
+		word-wrap: break-word;
+		overflow-wrap: break-word;
+		} */
+
+
+		.view.active {
+		opacity: 1;
+		pointer-events: auto;
+		transform: translateY(0);
+		}
+
+
+		.word-count-section{
+		margin-top: 10px;
+		content-justify: center;
+		}
+
+
+		.word-count-section .word-count-data{
+		padding-left: 20px;
+		}
+
+		#word-count-divider{
+		border-top: 1px dashed grey;
+		opacity: 0.7;
+		}
+
+
+		#content-container {
+		position: relative;
+		min-height: 300px;
+		}
 
 
     .word-count-section .word-count-data {
@@ -111,6 +152,11 @@
       /* Placeholder for actual progress */
       background-color: #66cc66;
     }
+    
+     .tooltip {
+        color: grey;
+        font-size: 12px;
+    }
 
     /* Simple styling for the settings form */
     #settings-view form div {
@@ -141,7 +187,7 @@
       <h2>Welcome to Advanced Word Analysis</h2>
       <button onclick="google.script.run.sayHello()">Click Me</button>
       <table class="word-count-section">
-        <tr>
+<!--         <tr>
           <td>Word&nbsp;Count</td>
           <td id="totalWords" class="word-count-data">0</td>
         </tr>
@@ -152,7 +198,26 @@
         <tr>
           <td>Paragraph&nbsp;Count</td>
           <td id="totalParagraphs" class="word-count-data">0</td>
-        </tr>
+        </tr> -->
+        <tr>
+						<td>Word Count</td>
+						<td class="word-count-data" id="wordCount">Loading...</td>
+					</tr>
+					<tr>
+						<td>Sentence Count*</td>
+						<td class="word-count-data" id="sentenceCount">Loading...</td>
+					</tr>
+					<!-- <hr id="word-count-divider"> -->
+
+					<tr>
+						<td>Paragraph Count**</td>
+						<td class="word-count-data" id="paragraphCount">Loading...</td>
+					</tr>
+
+          <tr>
+						<td>Most Reused Word</td>
+						<td class="word-count-data" id="reusedWord">Loading...</td>
+					</tr>
 
         <tr>
           <td id="word-count-divider" colspan="2"></td>
@@ -179,6 +244,12 @@
         <!-- Dynamically‑generated section rows will land down here -->
         <tbody id="sectionRows"></tbody>
       </table>
+      
+      <p class="tooltip">
+          *Sentence count based on text blocks that end with any of . ? or !. Section headers not counted.<br><br>
+          **Paragraph count based on text blocks bounded by whitespace. Section headers not counted.
+
+        </p>
     </div>
 
     <!-- Gemini View -->
@@ -246,6 +317,38 @@
 
 <!-- JavaScript -->
 <script>
+  window.onload = function() {
+      getWordCount();
+      getSentenceCount();
+      getParagraphCount();
+      getReusedWord();
+    }
+
+    function getReusedWord() {
+      google.script.run.withSuccessHandler(function(count) {
+          document.getElementById("reusedWord").innerText = '"'+count.maxWord+'" ('+count.data[count.maxWord]+')';
+        }).mostReusedWords();
+    }
+
+    function getWordCount() {
+      console.log("Word counter");
+      google.script.run.withSuccessHandler(function(count) {
+          document.getElementById("wordCount").innerText = count;
+          console.log("Word count: "+count);
+        }).wordCount();
+    }
+    function getSentenceCount() {
+      
+      google.script.run.withSuccessHandler(function(count) {
+          document.getElementById("sentenceCount").innerText = count;
+          console.log("Sentence count: "+count);
+        }).sentenceCount();
+    }
+    function getParagraphCount() {
+      google.script.run.withSuccessHandler(function(count) {
+          document.getElementById("paragraphCount").innerText = count;
+        }).paragraphCount();
+    }
   function showView(viewId) {
 			// Update navigation links
 			const navLinks = document.querySelectorAll('.navbar a');
@@ -380,3 +483,4 @@
 </body>
 
 </html>
+

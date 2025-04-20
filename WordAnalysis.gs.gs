@@ -31,6 +31,7 @@ function countWordsAndStats() {
   };
 }
 
+
 function countWordsSelected(){
   const doc = DocumentApp.getActiveDocument();
   const selection = doc.getSelection();
