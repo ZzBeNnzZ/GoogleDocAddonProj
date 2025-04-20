@@ -269,16 +269,25 @@
 		});
 
     function runWritingTool(tool){
+
+      if (tool === "professional"){
+        var selectedText = "Make this excerpt of text professional. Keep a similar structure to the original phrasing and only respond with the final version of the text you create. This is the text: "
+      }
         var selectedText;
 
         google.script.run
           .withSuccessHandler(function(text){
-            selectedText = text
+            selectedText += text
+            google.script.run
+              .withSuccessHandler(function(response) {
+                console.log(response)
+                google.script.run
+                  .withSuccessHandler(() => {console.log("Successfully inserted text")})
+                  .insertTextAfterSelection(response)
+              }).callGemini(selectedText)
+        
           }).getSelectedText()
 
-        google.script.run
-          .withSuccessHandler(() => {console.log("Successfully inserted text")})
-          .insertTextAfterSelection("Test text for inserting")
 
     }
 
