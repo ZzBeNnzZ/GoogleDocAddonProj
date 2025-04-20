@@ -272,6 +272,12 @@
 
       if (tool === "professional"){
         var selectedText = "Make this excerpt of text professional. Keep a similar structure to the original phrasing and only respond with the final version of the text you create. This is the text: "
+      } else if (tool === "friendly"){
+        var selectedText = "Make this excerpt of text friendly. Keep a similar structure to the original phrasing and only respond with the final version of the text you create. This is the text: "
+      } else if (tool === "concise"){
+        var selectedText = "Make this excerpt of text concise. Keep a similar structure to the original phrasing and only respond with the final version of the text you create. This is the text: "
+      } else if (tool === "summary"){
+        var selectedText = "Summarize this excerpt of text. Be sure to include relevant main ideas that you find through the text, and provide some context to ideas when needed. This is the text: "
       }
         var selectedText;
 

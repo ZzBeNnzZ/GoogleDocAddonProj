@@ -37,9 +37,10 @@ function getSelectedText() {
 }
 
 function insertTextAfterSelection(newText, color = hexColor) {
+  newText = " " + newText + " ";
   const doc       = DocumentApp.getActiveDocument();
   const selection = doc.getSelection();
-  if (!selection) throw new Error('Please select some text first.');
+  if (!selection) throw new Error('select some text first.');
 
   const elements  = selection.getSelectedElements();
   const lastSel   = elements[elements.length - 1];
