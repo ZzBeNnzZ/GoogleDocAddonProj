@@ -141,17 +141,17 @@
 				<table class="word-count-section">
 					<tr>
 						<td>Word Count</td>
-						<td class="word-count-data">000</td>
+						<td class="word-count-data" id="wordCount">000</td>
 					</tr>
 					<tr>
 						<td>Sentence Count</td>
-						<td class="word-count-data">000</td>
+						<td class="word-count-data" id="sentenceCount">000</td>
 					</tr>
 					<!-- <hr id="word-count-divider"> -->
 
 					<tr>
 						<td>Paragraph Count</td>
-						<td class="word-count-data">000</td>
+						<td class="word-count-data" id="paragraphCount">000</td>
 					</tr>
 
 
@@ -226,6 +226,22 @@
 
 		<!-- JavaScript -->
 		<script>
+
+    function getWordCount() {
+      google.script.run.withSuccessHandler(function(count) {
+          document.getElementById("wordCount").innerText = count;
+        }).wordCount();
+    }
+    function getSentenceCount() {
+      google.script.run.withSuccessHandler(function(count) {
+          document.getElementById("sentenceCount").innerText = count;
+        }).sentenceCount();
+    }
+    function getParagraphCount() {
+      google.script.run.withSuccessHandler(function(count) {
+          document.getElementById("paragraphCount").innerText = count;
+        }).paragraphCount();
+    }
 		function showView(viewId) {
 			// Update navigation links
 			const navLinks = document.querySelectorAll('.navbar a');
