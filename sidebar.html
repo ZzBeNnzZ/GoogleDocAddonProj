@@ -247,9 +247,11 @@
 			}
 		}
 
-		function getGeminiResponse() {
+		function getGeminiResponse(prompt = "") {
 
-			const prompt = document.getElementById("geminiPrompt").value;
+      if(prompt === ""){
+			    prompt = document.getElementById("geminiPrompt").value;
+      }
 			document.getElementById("geminiPrompt").value = "";
 			console.log("USER PROMPT: " + prompt)
 
@@ -267,10 +269,17 @@
 		});
 
     function runWritingTool(tool){
+        var selectedText;
+
         google.script.run
           .withSuccessHandler(function(text){
-            console.log(text[0])
+            selectedText = text
           }).getSelectedText()
+
+        google.script.run
+          .withSuccessHandler(() => {console.log("Successfully inserted text")})
+          .insertTextAfterSelection("Test text for inserting")
+
     }
 
 

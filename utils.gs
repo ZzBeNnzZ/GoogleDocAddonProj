@@ -1,6 +1,8 @@
 const properties = PropertiesService.getScriptProperties().getProperties();
 const geminiApiKey = properties['GOOGLE_API_KEY'];
 const geminiEndpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${geminiApiKey}`;
+const hexColor = '#1a73e8'
+
 
 // get user selected text
 function getSelectedText() {
@@ -32,6 +34,41 @@ function getSelectedText() {
   }
   if (!text.length) throw new Error('Please select some text.');
   return text;
+}
+
+function insertTextAfterSelection(newText, color = hexColor) {
+  const doc       = DocumentApp.getActiveDocument();
+  const selection = doc.getSelection();
+  if (!selection) throw new Error('Please select some text first.');
+
+  const elements  = selection.getSelectedElements();
+  const lastSel   = elements[elements.length - 1];
+
+  if (lastSel.isPartial()) {
+    const textElem  = lastSel.getElement().asText();
+    const endOffset = lastSel.getEndOffsetInclusive();
+
+    textElem.insertText(endOffset + 1, newText);
+    textElem.setForegroundColor(
+      endOffset + 1,
+      endOffset + newText.length,
+      color
+    );
+
+  } else {
+    const elem = lastSel.getElement();
+
+    if (elem.editAsText) {
+      const added = elem.asText().appendText(newText);
+      added.setForegroundColor(color);
+    } else {
+      const parent = elem.getParent();
+      const idx = parent.getChildIndex(elem);
+      const p = parent.insertParagraph(idx + 1, newText);
+      const txt = p.getChild(0).asText();
+      txt.setForegroundColor(0, newText.length - 1, color);
+    }
+  }
 }
 
 // BASIC PROMPT CALLING
