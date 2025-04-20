@@ -110,6 +110,11 @@
 		background-color: #66cc66;
 		}
 
+    .tooltip {
+        color: grey;
+        font-size: 12px;
+    }
+
 		/* Simple styling for the settings form */
 		#settings-view form div {
 		margin-bottom: 8px;
@@ -141,25 +146,36 @@
 				<table class="word-count-section">
 					<tr>
 						<td>Word Count</td>
-						<td class="word-count-data">000</td>
+						<td class="word-count-data" id="wordCount">Loading...</td>
 					</tr>
 					<tr>
-						<td>Sentence Count</td>
-						<td class="word-count-data">000</td>
+						<td>Sentence Count*</td>
+						<td class="word-count-data" id="sentenceCount">Loading...</td>
 					</tr>
 					<!-- <hr id="word-count-divider"> -->
 
 					<tr>
-						<td>Paragraph Count</td>
-						<td class="word-count-data">000</td>
+						<td>Paragraph Count**</td>
+						<td class="word-count-data" id="paragraphCount">Loading...</td>
 					</tr>
 
 
 					<tr >
 						<td> Section Word Count </td>
-						<td class="word-count-data"> 100 </td>
+						<td class="word-count-data"> Loading... </td>
+					</tr>
+
+          <tr>
+						<td>Most Reused Word</td>
+						<td class="word-count-data" id="reusedWord">Loading...</td>
 					</tr>
 				</table>
+
+        <p class="tooltip">
+          *Sentence count based on text blocks that end with any of . ? or !. Section headers not counted.<br><br>
+          **Paragraph count based on text blocks bounded by whitespace. Section headers not counted.
+
+        </p>
 			</div>
 
 			<!-- Gemini View -->
@@ -226,6 +242,39 @@
 
 		<!-- JavaScript -->
 		<script>
+
+    window.onload = function() {
+      getWordCount();
+      getSentenceCount();
+      getParagraphCount();
+      getReusedWord();
+    }
+
+    function getReusedWord() {
+      google.script.run.withSuccessHandler(function(count) {
+          document.getElementById("reusedWord").innerText = '"'+count.maxWord+'" ('+count.data[count.maxWord]+')';
+        }).mostReusedWords();
+    }
+
+    function getWordCount() {
+      console.log("Word counter");
+      google.script.run.withSuccessHandler(function(count) {
+          document.getElementById("wordCount").innerText = count;
+          console.log("Word count: "+count);
+        }).wordCount();
+    }
+    function getSentenceCount() {
+      
+      google.script.run.withSuccessHandler(function(count) {
+          document.getElementById("sentenceCount").innerText = count;
+          console.log("Sentence count: "+count);
+        }).sentenceCount();
+    }
+    function getParagraphCount() {
+      google.script.run.withSuccessHandler(function(count) {
+          document.getElementById("paragraphCount").innerText = count;
+        }).paragraphCount();
+    }
 		function showView(viewId) {
 			// Update navigation links
 			const navLinks = document.querySelectorAll('.navbar a');
