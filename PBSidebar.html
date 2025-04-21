@@ -97,15 +97,16 @@
         const endDate = document.getElementById("endDate").value;
         const wordGoal = parseInt(document.getElementById("wordGoal").value, 10);
 
-        if (!startDate || !endDate || isNaN(wordGoal))
+        /*if (!startDate || !endDate || isNaN(wordGoal))
         {
           alert("Please fill in all fields.");
           return;
-        }
+        }*/
         google.script.run
         .withSuccessHandler(() => {
           alert("Settings saved.");
           updateExpectedProgress(); // Update bar immediately
+          updateProgress();
         })
         .saveProgressSettings(startDate, endDate, wordGoal);
       }
