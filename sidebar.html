@@ -252,6 +252,7 @@
         </p>
     </div>
 
+<<<<<<< HEAD
     <!-- Gemini View -->
     <div id="gemini-view" class="view">
       <h1>Gemini Implementation</h1>
@@ -267,6 +268,24 @@
       <button onclick="getGeminiResponse()">Click to prompt</button>
       <h1 id="geminiResponse"> </h1>
     </div>
+=======
+		<!-- Gemini View -->
+		<div id="gemini-view" class="view">
+			<h2>Gemini Writing Tools</h2>
+			<p> Select text and choose a writing tool to have Gemini rewrite your text. </p>
+			<div>
+				<button onclick="runWritingTool('summarize')">Summarize</button>
+				<button onclick="runWritingTool('friendly')">Make Friendly</button>
+				<button onclick="runWritingTool('professional')">Make Professional</button>
+				<button onclick="runWritingTool('concise')">Make Concise</button>
+			</div>
+			<br>
+			<input type="text" id="geminiPrompt" name="prompt"/>
+			<button onclick="getGeminiResponse()">Click to prompt</button>
+			<h1 id="geminiResponse"> </h1>
+		</div>
+
+>>>>>>> temp-merge-branch
 
     <!-- Progress View -->
     <div id="progress-view" class="view">
@@ -374,9 +393,17 @@
       }
 		}
 
+<<<<<<< HEAD
 		function getGeminiResponse() {
 
 			const prompt = document.getElementById("geminiPrompt").value;
+=======
+		function getGeminiResponse(prompt = "") {
+
+      if(prompt === ""){
+			    prompt = document.getElementById("geminiPrompt").value;
+      }
+>>>>>>> temp-merge-branch
 			document.getElementById("geminiPrompt").value = "";
 			console.log("USER PROMPT: " + prompt)
 
@@ -389,6 +416,39 @@
 		}
 
 
+<<<<<<< HEAD
+=======
+    function runWritingTool(tool){
+      let selectedText = "";
+      if (tool === "professional"){
+        selectedText = "Make this excerpt of text professional. Keep a similar structure to the original phrasing and only respond with the final version of the text you create. This is the text: "
+      } else if (tool === "friendly"){
+        selectedText = "Make this excerpt of text friendly. Keep a similar structure to the original phrasing and only respond with the final version of the text you create. This is the text: "
+      } else if (tool === "concise"){
+        selectedText = "Make this excerpt of text concise. Keep a similar structure to the original phrasing and only respond with the final version of the text you create. This is the text: "
+      } else if (tool === "summarize"){
+        selectedText = "Summarize this excerpt of text. Be sure to include relevant main ideas that you find through the text, and provide some context to ideas when needed. Only respond with a final summarized text. DO NOT MENTION ANYTHING ABOUT LOOKING AT THE TEXT ITSELF, I simply want a summary. This is the text you will be using: "
+      }
+        console.log("Before google script run selected text var is : " + selectedText);
+
+        google.script.run
+          .withSuccessHandler(function(text){
+            selectedText = selectedText + text;
+            console.log("RUNNING CALLGEMINI WITH: " + selectedText)
+            google.script.run
+              .withSuccessHandler(function(response) {
+                console.log(response)
+                google.script.run
+                  .withSuccessHandler(() => {console.log("Successfully inserted text")})
+                  .insertTextAfterSelection(response)
+              }).callGemini(selectedText)
+        
+          }).getSelectedText()
+
+
+    }
+
+>>>>>>> temp-merge-branch
 
 		// Load settings from the server into the form
 		function loadSettings() {
