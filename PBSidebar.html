@@ -46,6 +46,7 @@
     </div>
 
     <button class="update-btn" onclick="updateProgress()">Manually Update Progress</button>
+    <button class="update-btn" onclick="updateExpectedProgress()">Manually Update Expected Progress</button>
 
     <script>
       function updateProgress() {
@@ -61,6 +62,17 @@
           actualBar.style.width = percent + "%";
           actualBar.textContent = percent + "%";
         }).getProgressData();
+      }
+
+
+      function updateExpectedProgress() {
+        google.script.run.withSuccessHandler(function(data) {
+          google.script.run.callAlert();
+          const expectedBar = document.getElementById("expectedBar");
+          const percent = Math.round(data.percent * 10) / 10;
+          expectedBar.style.width = percent + "%";
+          expectedBar.textContent = percent + "%";
+        }).getExpectedProgressData();
       }
 
       setInterval(updateProgress, 30000);
