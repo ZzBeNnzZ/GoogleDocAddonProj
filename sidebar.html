@@ -252,23 +252,6 @@
         </p>
     </div>
 
-<<<<<<< HEAD
-    <!-- Gemini View -->
-    <div id="gemini-view" class="view">
-      <h1>Gemini Implementation</h1>
-      <div>
-        <button onclick="#">Proofread</button>
-        <button onclick="#">Summarize</button>
-        <button onclick="#">Make Friendly</button>
-        <button onclick="#">Make Profressional</button>
-        <button onclick="#">Make Concise</button>
-      </div>
-      <br>
-      <input type="text" id="geminiPrompt" name="prompt"/>
-      <button onclick="getGeminiResponse()">Click to prompt</button>
-      <h1 id="geminiResponse"> </h1>
-    </div>
-=======
 		<!-- Gemini View -->
 		<div id="gemini-view" class="view">
 			<h2>Gemini Writing Tools</h2>
@@ -285,7 +268,6 @@
 			<h1 id="geminiResponse"> </h1>
 		</div>
 
->>>>>>> temp-merge-branch
 
     <!-- Progress View -->
     <div id="progress-view" class="view">
@@ -393,17 +375,11 @@
       }
 		}
 
-<<<<<<< HEAD
-		function getGeminiResponse() {
-
-			const prompt = document.getElementById("geminiPrompt").value;
-=======
 		function getGeminiResponse(prompt = "") {
 
       if(prompt === ""){
 			    prompt = document.getElementById("geminiPrompt").value;
       }
->>>>>>> temp-merge-branch
 			document.getElementById("geminiPrompt").value = "";
 			console.log("USER PROMPT: " + prompt)
 
@@ -416,8 +392,6 @@
 		}
 
 
-<<<<<<< HEAD
-=======
     function runWritingTool(tool){
       let selectedText = "";
       if (tool === "professional"){
@@ -448,7 +422,6 @@
 
     }
 
->>>>>>> temp-merge-branch
 
 		// Load settings from the server into the form
 		function loadSettings() {
