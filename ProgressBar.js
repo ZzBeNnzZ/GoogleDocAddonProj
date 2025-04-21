@@ -51,7 +51,7 @@ function getExpectedProgressData()
 
   const totalDuration = end - start;
   const elapsed = now - start;
-  DocumentApp.getUi().alert("It is currently: " + now + " and the time comparison is: " + elapsed + " vs " + totalDuration);
+  //DocumentApp.getUi().alert("It is currently: " + now + " and the time comparison is: " + elapsed + " vs " + totalDuration);
   let percent = Math.max(0, Math.min((elapsed / totalDuration) * 100, 100));
   percent = Math.round(percent * 10) / 10;
 
