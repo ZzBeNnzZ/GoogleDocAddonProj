@@ -28,8 +28,8 @@ function callAlert() {
 
 function getExpectedProgressData() {
   // Placeholder start and end dates (use your preferred format/timezone)
-  const start = new Date("April 10, 2025 00:00:00"); 
-  const end = new Date("April 21, 2025 23:59:59");
+  const start = new Date("April 20, 2025 00:00:00"); 
+  const end = new Date("April 22, 2025 23:59:59");
   const now = new Date();
 
   const totalDuration = end - start;
