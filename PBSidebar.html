@@ -54,8 +54,8 @@
         google.script.run.withSuccessHandler(function(data) {
           google.script.run.callAlert();
           const actualBar = document.getElementById("actualBar");
-          //const percent = Math.round(data.percent);
-          percent = 30;
+          const percent = Math.round(data.percent);
+          //percent = 30;
     
           actualBar.style.width = percent + "%";
           actualBar.textContent = percent + "%";
