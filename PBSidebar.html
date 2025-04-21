@@ -48,8 +48,23 @@
     <button class="update-btn" onclick="updateProgress()">Manually Update Progress</button>
     <button class="update-btn" onclick="updateExpectedProgress()">Manually Update Expected Progress</button>
 
+    <h3>Set Progress Goals</h3>
+      <form id="settingsForm" onsubmit="saveSettings(); return false;">
+        <label for="startDate">Start Date:</label><br>
+        <input type="datetime-local" id="startDate"><br><br>
+      
+        <label for="endDate">End Date:</label><br>
+        <input type="datetime-local" id="endDate"><br><br>
+      
+        <label for="wordGoal">Expected Word Count:</label><br>
+        <input type="number" id="wordGoal" min="1"><br><br>
+      
+        <button type="submit">Save Settings</button>
+      </form>
+
     <script>
-      function updateProgress() {
+      function updateProgress()
+      {
         actualBar.style.width = 20 + "%";
         //google.script.run.callAlert();
         google.script.run.withSuccessHandler(function(data) {
@@ -65,7 +80,8 @@
       }
 
 
-      function updateExpectedProgress() {
+      function updateExpectedProgress()
+      {
         google.script.run.withSuccessHandler(function(data) {
           //google.script.run.callAlert();
           const expectedBar = document.getElementById("expectedBar");
@@ -73,6 +89,25 @@
           expectedBar.style.width = percent + "%";
           expectedBar.textContent = percent + "%";
         }).getExpectedProgressData();
+      }
+
+      function saveSettings()
+      {
+        const startDate = document.getElementById("startDate").value;
+        const endDate = document.getElementById("endDate").value;
+        const wordGoal = parseInt(document.getElementById("wordGoal").value, 10);
+
+        if (!startDate || !endDate || isNaN(wordGoal))
+        {
+          alert("Please fill in all fields.");
+          return;
+        }
+        google.script.run
+        .withSuccessHandler(() => {
+          alert("Settings saved.");
+          updateExpectedProgress(); // Update bar immediately
+        })
+        .saveProgressSettings(startDate, endDate, wordGoal);
       }
 
       setInterval(() => {
