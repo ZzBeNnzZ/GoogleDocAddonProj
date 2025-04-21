@@ -45,21 +45,21 @@
       <div class="bar actual" id="actualBar">0%</div>
     </div>
 
-    <button class="update-btn" onclick="updateProgress()">Update Progress</button>
+    <button class="update-btn" onclick="updateProgress()">Manually Update Progress</button>
 
     <script>
       function updateProgress() {
         actualBar.style.width = 20 + "%";
-        google.script.run.callAlert();
-        /*google.script.run.withSuccessHandler(function(data) {
-         
+        //google.script.run.callAlert();
+        google.script.run.withSuccessHandler(function(data) {
+          google.script.run.callAlert();
           const actualBar = document.getElementById("actualBar");
           //const percent = Math.round(data.percent);
           percent = 30;
     
           actualBar.style.width = percent + "%";
           actualBar.textContent = percent + "%";
-        }).getProgressData();*/
+        }).getProgressData();
       }
 
       //setInterval(updateProgress, 5000);
