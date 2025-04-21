@@ -125,33 +125,31 @@
     }
 
     .bar-container {
-      width: 100%;
-      background-color: #ddd;
-      border-radius: 10px;
-      margin-bottom: 15px;
-    }
+        width: 100%;
+        background-color: #ddd;
+        border-radius: 10px;
+        margin-bottom: 15px;
+      }
 
-    .bar {
-      height: 20px;
-      border-radius: 10px;
-      text-align: right;
-      padding-right: 5px;
-      color: white;
-      line-height: 20px;
-      transition: width 0.5s;
-    }
+      .bar {
+        height: 20px;
+        border-radius: 10px;
+        text-align: right;
+        padding-right: 5px;
+        color: white;
+        line-height: 20px;
+        transition: width 0.5s;
+      }
 
-    .expected {
-      width: 50%;
-      /* Placeholder for expected progress */
-      background-color: #8888ff;
-    }
+      .expected {
+        /*width: 50%; /* Placeholder for expected progress */
+        background-color: #8888ff;
+      }
 
-    .actual {
-      width: 30%;
-      /* Placeholder for actual progress */
-      background-color: #66cc66;
-    }
+      .actual {
+        /*width: 30%; /* Placeholder for actual progress */
+        background-color: #66cc66;
+      }
     
      .tooltip {
         color: grey;
@@ -276,14 +274,31 @@
         <h2>Writing Progress</h2>
 
         <div><strong>Expected Progress</strong></div>
-        <div class="bar-container">
-          <div class="bar expected">50%</div>
-        </div>
+    <div class="bar-container">
+      <div class="bar expected" id="expectedBar">0%</div>
+    </div>
 
-        <div><strong>Actual Progress</strong></div>
-        <div class="bar-container">
-          <div class="bar actual">30%</div>
-        </div>
+    <div><strong>Actual Progress</strong></div>
+    <div class="bar-container">
+      <div class="bar actual" id="actualBar">0%</div>
+    </div>
+
+    <button class="update-btn" onclick="updateProgress()">Manually Update Progress</button>
+    <button class="update-btn" onclick="updateExpectedProgress()">Manually Update Expected Progress</button>
+
+    <h3>Set Progress Goals</h3>
+      <form id="settingsForm" onsubmit="saveSettings(); return false;">
+        <label for="startDate">Start Date:</label><br>
+        <input type="datetime-local" id="startDate"><br><br>
+      
+        <label for="endDate">End Date:</label><br>
+        <input type="datetime-local" id="endDate"><br><br>
+      
+        <label for="wordGoal">Expected Word Count:</label><br>
+        <input type="number" id="wordGoal" min="1"><br><br>
+      
+        <button type="submit">Save Settings</button>
+      </form>
 </body>
 </div>
 
@@ -512,6 +527,80 @@
 			showView('home');
       refreshWordStats();
 		});
+
+
+    // Progress Bar Scripts Here
+    function updateProgress()
+      {
+        actualBar.style.width = 20 + "%";
+        //google.script.run.callAlert();
+        google.script.run.withSuccessHandler(function(data) {
+          //google.script.run.callAlert();
+          const actualBar = document.getElementById("actualBar");
+          const percent = Math.round(data.percent * 10) / 10;
+
+          //percent = 30;
+    
+          actualBar.style.width = percent + "%";
+          actualBar.textContent = percent + "%";
+        }).getProgressData();
+      }
+
+
+      function updateExpectedProgress()
+      {
+        google.script.run.withSuccessHandler(function(data) {
+          //google.script.run.callAlert();
+          const expectedBar = document.getElementById("expectedBar");
+          const percent = Math.round(data.percent * 10) / 10;
+          expectedBar.style.width = percent + "%";
+          expectedBar.textContent = percent + "%";
+        }).getExpectedProgressData();
+      }
+
+      function saveSettings()
+      {
+        const startDate = document.getElementById("startDate").value;
+        const endDate = document.getElementById("endDate").value;
+        const wordGoal = parseInt(document.getElementById("wordGoal").value, 10);
+
+        /*if (!startDate || !endDate || isNaN(wordGoal))
+        {
+          alert("Please fill in all fields.");
+          return;
+        }*/
+        google.script.run
+        .withSuccessHandler(() => {
+          //alert("Settings saved.");
+          updateExpectedProgress(); // Update bar immediately
+          updateProgress();
+        })
+        .saveProgressSettings(startDate, endDate, wordGoal);
+      }
+
+      google.script.run.withSuccessHandler(data =>
+      {
+        if (data.start) document.getElementById("startDate").value = data.start;
+        if (data.end) document.getElementById("endDate").value = data.end;
+        if (data.wordGoal) document.getElementById("wordGoal").value = data.wordGoal;
+      }).getProgressSettings();
+
+      function getProgressSettings()
+      {
+        const userProps = PropertiesService.getUserProperties();
+        return {
+          start: userProps.getProperty('startDate'),
+          end: userProps.getProperty('endDate'),
+          wordGoal: userProps.getProperty('wordGoal')
+        };
+      }
+
+      setInterval(() => {
+        updateProgress();
+        updateExpectedProgress();
+      }, 30000);
+      updateProgress();
+      updateExpectedProgress();
 </script>
 </body>
 
