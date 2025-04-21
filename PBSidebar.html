@@ -67,7 +67,7 @@
 
       function updateExpectedProgress() {
         google.script.run.withSuccessHandler(function(data) {
-          google.script.run.callAlert();
+          //google.script.run.callAlert();
           const expectedBar = document.getElementById("expectedBar");
           const percent = Math.round(data.percent * 10) / 10;
           expectedBar.style.width = percent + "%";
@@ -75,8 +75,12 @@
         }).getExpectedProgressData();
       }
 
-      setInterval(updateProgress, 30000);
+      setInterval(() => {
+        updateProgress();
+        updateExpectedProgress();
+      }, 30000);
       updateProgress();
+      updateExpectedProgress();
     </script>
 
   </body>
