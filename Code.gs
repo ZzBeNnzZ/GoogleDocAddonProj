@@ -4,7 +4,8 @@ function onOpen() {
     .addItem('Say Hello', 'sayHello')
     .addItem('Say Goodbye', 'sayGoodbye')
     .addItem('Side Bar open','showSidebar')
-    .addItem('Progress Bar Open', 'showProgressBarSidebar')
+    // .addItem('Progress Bar Open', 'showProgressBarSidebar')
+    .addItem('Pop Up open','showPopUp')
     .addToUi();
 }
 
@@ -16,15 +17,27 @@ function sayGoodbye() {
   DocumentApp.getUi().alert('Goodbye, World!');
 }
 
-function showSidebar() {
+function showSidebar(){
   var settings = Settings.getSettings(); // Get stored settings
 
-  var width = settings.sidebarWidth || 300; // Fallback to 300 if not defined
+  var width = settings.sidebarWidth || 600; // Fallback to 300 if not defined
 
   const html = HtmlService.createHtmlOutputFromFile('sidebar')
-    .setTitle('My Custom UI')
-    .setWidth(width);
+    .setTitle('Word Analysis Sidebar')
+    .setWidth(width)
   DocumentApp.getUi().showSidebar(html);
+}
+
+function showPopUp() {
+  var settings = Settings.getSettings(); // Get stored settings
+
+  var width = settings.sidebarWidth || 600; // Fallback to 300 if not defined
+
+  const html = HtmlService.createHtmlOutputFromFile('sidebar')
+    .setTitle('Word Analysis Pop Up')
+    .setWidth(width)
+    .setHeight(600);
+  DocumentApp.getUi().showModelessDialog(html, 'Word Analysis Pop Up');
 }
 
 
