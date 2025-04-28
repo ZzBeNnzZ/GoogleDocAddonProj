@@ -1,49 +1,42 @@
 
 var Settings = (function() {
-  // Default settings used if no user setting is stored.
   var defaultSettings = {
-    displayHomeInfo: true,
-    sidebarWidth: 300,
-    fontSize: 14,
-    themeColor: 'default'
+    displayHomeInfo:        true,
+    showSectionBreakdown:   true,
+    fontSize:               14,
+    themeColor:             'default',
+    topNWords:              3,
+    topNDisplayOption:      'both',
+    accentColor:            'default',
+    customExclusions:       ''
   };
 
-  // Retrieves the user settings.
   function getSettings() {
-    var props = PropertiesService.getUserProperties().getProperties();
-    if (!props || Object.keys(props).length === 0) {
-      // No existing settings: save and return defaults.
+    var p = PropertiesService.getUserProperties().getProperties();
+    if (!p || Object.keys(p).length === 0) {
       setSettings(defaultSettings);
       return defaultSettings;
     }
-    // Return settings converting types where needed.
     return {
-      displayHomeInfo: (props.displayHomeInfo === 'true'),
-      sidebarWidth: parseInt(props.sidebarWidth, 10),
-      fontSize: parseInt(props.fontSize, 10),
-      themeColor: props.themeColor
+      displayHomeInfo:      p.displayHomeInfo === 'true',
+      showSectionBreakdown: p.showSectionBreakdown === 'true',
+      fontSize:             parseInt(p.fontSize, 10),
+      themeColor:           p.themeColor,
+      topNWords:            parseInt(p.topNWords, 10),
+      topNDisplayOption:    p.topNDisplayOption || 'both',
+      accentColor:          p.accentColor,
+      customExclusions:     p.customExclusions || ''
     };
   }
 
-  // Saves a whole settings object.
-  function setSettings(newSettings) {
+  function setSettings(s) {
     var props = {};
-    for (var key in newSettings) {
-      props[key] = newSettings[key].toString();
-    }
-    Logger.log("Saving settings: " + JSON.stringify(props));
+    for (var k in s) props[k] = s[k].toString();
     PropertiesService.getUserProperties().setProperties(props);
   }
 
-  // Update a single setting.
-  function updateSetting(key, value) {
-    PropertiesService.getUserProperties().setProperty(key, value.toString());
-  }
-  
-
   return {
     getSettings: getSettings,
-    setSettings: setSettings,
-    updateSetting: updateSetting
+    setSettings: setSettings
   };
 })();
