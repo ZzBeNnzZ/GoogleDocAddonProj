@@ -293,15 +293,17 @@
     function updateExpectedProgress(){
       google.script.run.withSuccessHandler(d=>{
         const e = document.getElementById('expectedBar');
-        e.style.width = d.percent + '%';
-        e.innerText   = d.percent + '%';
+        const percent = Math.round(d.percent * 10) / 10;
+        e.style.width = percent + '%';
+        e.innerText   = percent + '%';
       }).getExpectedProgressData();
     }
     function updateProgress(){
       google.script.run.withSuccessHandler(d=>{
         const a = document.getElementById('actualBar');
-        a.style.width = d.percent + '%';
-        a.innerText   = d.percent + '%';
+        const percent = Math.round(d.percent * 10) / 10;
+        a.style.width = percent + '%';
+        a.innerText   = percent + '%';
       }).getProgressData();
     }
     function saveProgressSettingsClient(){
@@ -373,6 +375,13 @@
       updateExpectedProgress();
       updateProgress();
     });
+
+    setInterval(() => {
+        updateProgress();
+        updateExpectedProgress();
+      }, 30000);
+      updateProgress();
+      updateExpectedProgress();
   </script>
 </body>
 </html>

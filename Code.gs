@@ -1,8 +1,8 @@
 function onOpen() {
   DocumentApp.getUi()
     .createMenu('My Add-on')
-    .addItem('Say Hello', 'sayHello')
-    .addItem('Say Goodbye', 'sayGoodbye')
+    //.addItem('Say Hello', 'sayHello')
+    //.addItem('Say Goodbye', 'sayGoodbye')
     .addItem('Open Sidebar','showSidebar')
     .addItem('Open Pop-Up','showPopUp')
     .addToUi();
