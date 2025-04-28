@@ -315,6 +315,22 @@
         updateProgress();
       }).saveProgressSettings(start,end,g);
     }
+    google.script.run.withSuccessHandler(data =>
+      {
+        if (data.start) document.getElementById("startDate").value = data.start;
+        if (data.end) document.getElementById("endDate").value = data.end;
+        if (data.wordGoal) document.getElementById("wordGoal").value = data.wordGoal;
+      }).getProgressSettings();
+
+      function getProgressSettings()
+      {
+        const userProps = PropertiesService.getUserProperties();
+        return {
+          start: userProps.getProperty('startDate'),
+          end: userProps.getProperty('endDate'),
+          wordGoal: userProps.getProperty('wordGoal')
+        };
+      }
 
     // --- SETTINGS ---
     function loadSettings(){
@@ -379,9 +395,11 @@
     setInterval(() => {
         updateProgress();
         updateExpectedProgress();
+        refreshAllStats();
       }, 30000);
       updateProgress();
       updateExpectedProgress();
+      refreshAllStats();
   </script>
 </body>
 </html>
