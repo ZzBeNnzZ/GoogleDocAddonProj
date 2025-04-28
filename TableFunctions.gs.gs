@@ -1,54 +1,41 @@
+
 function wordCount() {
   const doc = DocumentApp.getActiveDocument();
   const body = doc.getBody();
   const paragraphs = body.getParagraphs();
 
   let text = '';
-  
-  // Build text from normal paragraphs only (excluding headings)
   paragraphs.forEach(p => {
     if (p.getHeading() === DocumentApp.ParagraphHeading.NORMAL) {
-      text += p.getText() + ' '; //only count normal text for words
+      text += p.getText() + ' ';
     }
   });
-
-  // Trim any trailing spaces
   text = text.trim();
 
-  // Count words
   const words = text.match(/\b\w+\b/g);
-  const wordCount = words ? words.length : 0;
-
-  const trueWC = wordCount.valueOf()-1; //correct for inconsistency
-  
-  Logger.log("Word count: " + trueWC);
-  return trueWC;
+  const count = words ? words.length : 0;
+  // adjust if needed
+  const trueCount = Math.max(0, count - 1);
+  return trueCount;
 }
 
 function sentenceCount() {
   const doc = DocumentApp.getActiveDocument();
   const body = doc.getBody();
   const paragraphs = body.getParagraphs();
+
   let text = '';
-  
-  // Build text from normal paragraphs only (excluding headings)
   paragraphs.forEach(p => {
     if (p.getHeading() === DocumentApp.ParagraphHeading.NORMAL) {
-      text += p.getText() + ' '; //only count normal text for sentences
+      text += p.getText() + ' ';
     }
   });
-
-  // Trim any trailing spaces
   text = text.trim();
-  
-  const sentences = text.match(/[^.!?]+[.!?]+(\s|$)/g);
-  //Sentence is something that ends in any of .!?, so it will miss section headings, etc.
-  const sentenceCount = sentences ? sentences.length : 0;
 
-  const trueWC = sentenceCount.valueOf()-1; //correct for inconsistency
-  
-  Logger.log("Sentence count: " + trueWC);
-  return trueWC;
+  const sentences = text.match(/[^.!?]+[.!?]+(\s|$)/g);
+  const count = sentences ? sentences.length : 0;
+  const trueCount = Math.max(0, count - 1);
+  return trueCount;
 }
 
 function paragraphCount() {
@@ -56,50 +43,76 @@ function paragraphCount() {
   const body = doc.getBody();
   const paragraphs = body.getParagraphs();
 
-  const nonEmptyParagraphs = paragraphs.filter(p => p.getText().trim().length > 0 && p.getHeading() === DocumentApp.ParagraphHeading.NORMAL);
-  //Paragraph is any text segment (return bounded) that is not a heading. In the test document, this includes all of the red and bold text as it is technically not a section heading.
-  const paragraphCount = nonEmptyParagraphs.length;
-  
-  Logger.log("Paragraph count: " + paragraphCount);
-  return paragraphCount;
+  const nonEmpty = paragraphs.filter(p =>
+    p.getText().trim().length > 0 &&
+    p.getHeading() === DocumentApp.ParagraphHeading.NORMAL
+  );
+  return nonEmpty.length;
 }
 
 function mostReusedWords() {
   const doc = DocumentApp.getActiveDocument();
-  const body = doc.getBody();
-  const paragraphs = body.getParagraphs();
+  const paragraphs = doc.getBody().getParagraphs();
 
   let text = '';
-  
-  // Build text from normal paragraphs only (excluding headings)
   paragraphs.forEach(p => {
     if (p.getHeading() === DocumentApp.ParagraphHeading.NORMAL) {
-      text += p.getText() + ' '; //only count normal text for words
+      text += p.getText() + ' ';
     }
   });
-
-  // Trim any trailing spaces
   text = text.trim();
 
-  // Count words
-  const words = text.match(/\b\w+\b/g);
-  const wordCount = words ? words.length : 0;
-
-  let wordStats = {};
-  let maxWord = "";
-  let maxWordNum = 0;
-  words.forEach(word => {
-    if (word.length > 0) {
-      if (!wordStats[word]) wordStats[word] = 0;
-      wordStats[word]+=1;
-    }
-    if (wordStats[word] > maxWordNum) {
-      maxWord = word;
-      maxWordNum = wordStats[word];
+  const words = text.match(/\b\w+\b/g) || [];
+  const stats = {};
+  let maxWord = '', maxCount = 0;
+  words.forEach(w => {
+    const lw = w.toLowerCase();
+    stats[lw] = (stats[lw] || 0) + 1;
+    if (stats[lw] > maxCount) {
+      maxCount = stats[lw];
+      maxWord = lw;
     }
   });
 
-  
-  Logger.log("Most reused word: "+maxWord);
-  return {"maxWord": maxWord, "data": wordStats};
+  return { maxWord: maxWord, data: stats };
+}
+
+/**
+ * Returns the top-n most frequent normal-text words,
+ * excluding any in the user-defined exclusion list.
+ *
+ * @param {number} n  Number of top words to return.
+ * @returns {Array<{word:string,count:number}>}
+ */
+function topFrequentWords(n) {
+  // load exclusions
+  const props = PropertiesService.getUserProperties().getProperties();
+  const exclStr = props.customExclusions || '';
+  const exclusions = exclStr
+    .split(',')
+    .map(s => s.trim().toLowerCase())
+    .filter(s => s);
+
+  // gather normal text
+  const paras = DocumentApp.getActiveDocument()
+    .getBody()
+    .getParagraphs()
+    .filter(p => p.getHeading() === DocumentApp.ParagraphHeading.NORMAL);
+
+  const text = paras.map(p => p.getText()).join(' ').trim();
+  const words = text.match(/\b\w+\b/g) || [];
+
+  // count, skipping exclusions
+  const counts = {};
+  words.forEach(w => {
+    const lw = w.toLowerCase();
+    if (exclusions.includes(lw)) return;
+    counts[lw] = (counts[lw] || 0) + 1;
+  });
+
+  // sort + slice
+  return Object.keys(counts)
+    .sort((a, b) => counts[b] - counts[a])
+    .slice(0, n)
+    .map(w => ({ word: w, count: counts[w] }));
 }
