@@ -1,11 +1,10 @@
 function onOpen() {
   DocumentApp.getUi()
-    .createMenu('My Add-on') // Adds a menu to Google Docs
+    .createMenu('My Add-on')
     .addItem('Say Hello', 'sayHello')
     .addItem('Say Goodbye', 'sayGoodbye')
-    .addItem('Side Bar open','showSidebar')
-    // .addItem('Progress Bar Open', 'showProgressBarSidebar')
-    .addItem('Pop Up open','showPopUp')
+    .addItem('Open Sidebar','showSidebar')
+    .addItem('Open Pop-Up','showPopUp')
     .addToUi();
 }
 
@@ -18,37 +17,31 @@ function sayGoodbye() {
 }
 
 function showSidebar(){
-  var settings = Settings.getSettings(); // Get stored settings
-
-  var width = settings.sidebarWidth || 600; // Fallback to 300 if not defined
-
-  const html = HtmlService.createHtmlOutputFromFile('sidebar')
+  const settings = Settings.getSettings();
+  const width    = settings.sidebarWidth || 600;
+  const html = HtmlService
+    .createHtmlOutputFromFile('sidebar')
     .setTitle('Word Analysis Sidebar')
-    .setWidth(width)
+    .setWidth(width);
   DocumentApp.getUi().showSidebar(html);
 }
 
 function showPopUp() {
-  var settings = Settings.getSettings(); // Get stored settings
-
-  var width = settings.sidebarWidth || 600; // Fallback to 300 if not defined
-
-  const html = HtmlService.createHtmlOutputFromFile('sidebar')
-    .setTitle('Word Analysis Pop Up')
+  const settings = Settings.getSettings();
+  const width    = settings.sidebarWidth || 600;
+  const html = HtmlService
+    .createHtmlOutputFromFile('sidebar')
+    .setTitle('Word Analysis Pop-Up')
     .setWidth(width)
     .setHeight(600);
-  DocumentApp.getUi().showModelessDialog(html, 'Word Analysis Pop Up');
+  DocumentApp.getUi().showModelessDialog(html,'Word Analysis Pop-Up');
 }
 
-
-// --- Settings functions ---
-
+// Settings APIs
 function getSettings() {
   return Settings.getSettings();
 }
-
-function saveSettings(settings) {
-  Settings.setSettings(settings); // This calls the function from the Settings.gs file.
-  return "Settings saved successfully!";
+function saveSettings(s) {
+  Settings.setSettings(s);
+  return 'Settings saved!';
 }
-

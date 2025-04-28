@@ -6,32 +6,30 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100..900&display=swap" rel="stylesheet">
-
   <style>
-    :root {
-      --expected-color: #8888ff;
-      --actual-color:   #66cc66;
-    }
+    :root { --expected-color:#8888ff; --actual-color:#66cc66; }
     body {
       margin:0; padding:0; overflow-x:hidden;
       font-family:'Roboto',sans-serif;
-      transition:background .3s, color .3s, font-size .3s;
+      transition: background .3s, color .3s, font-size .3s;
     }
-    body.default-theme { background:#fff; color:#000 }
-    body.dark-theme    { background:#222; color:#eee }
-    body.light-theme   { background:#f9f9f9; color:#000 }
+    body.default-theme { background:#fff; color:#000; }
+    body.dark-theme    { background:#222; color:#eee; }
+    body.light-theme   { background:#f9f9f9; color:#000; }
 
-    .navbar { background:#E5E8E8; padding:1rem }
-    .navbar ul { list-style:none; margin:0; padding:0; display:flex; gap:1rem }
-    .navbar a { text-decoration:none; color:black; cursor:pointer }
-    .navbar a.active { font-weight:bold; color:darkblue }
-    .navbar a:hover  { color:darkblue }
+    .navbar { background:#E5E8E8; padding:1rem; }
+    .navbar ul { display:flex; gap:1rem; margin:0; padding:0; list-style:none; }
+    .navbar a {
+      text-decoration:none; color:black; cursor:pointer;
+    }
+    .navbar a.active { font-weight:bold; color:darkblue; }
+    .navbar a:hover  { color:darkblue; }
 
     .view {
       position:absolute; top:60px; left:0; right:0; bottom:0;
       padding:10px; opacity:0; pointer-events:none;
       transform:translateY(10px);
-      transition:opacity .3s, transform .3s;
+      transition: opacity .3s, transform .3s;
       box-sizing:border-box; overflow:auto;
     }
     .view.active {
@@ -39,28 +37,28 @@
       transform:translateY(0);
     }
 
-    table { width:100%; border-collapse:collapse; margin-bottom:8px }
-    th, td { padding:4px 8px }
-    #word-count-divider { border-top:1px dashed grey; opacity:.7 }
+    table { width:100%; border-collapse:collapse; margin-bottom:8px; }
+    th, td { padding:4px 8px; }
+    #word-count-divider { border-top:1px dashed grey; opacity:.7; }
 
-    .tooltip { font-size:12px; color:grey; margin-top:8px }
+    .tooltip { font-size:12px; color:grey; margin-top:8px; }
 
-    .bar-container { width:100%; background:#ddd; border-radius:10px; margin:8px 0 }
+    .bar-container { width:100%; background:#ddd; border-radius:10px; margin:8px 0; }
     .bar {
       height:20px; border-radius:10px; line-height:20px;
       text-align:right; padding-right:5px; color:#fff;
-      transition:width .5s;
+      transition: width .5s;
     }
-    .expected { background:var(--expected-color); width:0 }
-    .actual   { background:var(--actual-color);   width:0 }
+    .expected { background:var(--expected-color); width:0; }
+    .actual   { background:var(--actual-color);   width:0; }
 
-    form div { margin-bottom:8px }
-    label { margin-right:8px }
-    textarea { width:100%; box-sizing:border-box }
-    button { cursor:pointer; margin:4px 2px }
+    form div { margin-bottom:8px; }
+    label { margin-right:8px; }
+    textarea { width:100%; box-sizing:border-box; }
+    button { cursor:pointer; margin:4px 2px; }
   </style>
 </head>
-<body>
+<body class="default-theme" style="font-size:14px">
 
   <!-- NAV BAR -->
   <nav class="navbar">
@@ -76,7 +74,7 @@
     <!-- HOME VIEW -->
     <div id="home-view" class="view active">
       <h2>Welcome to Advanced Word Analysis</h2>
-      <p><em>(Toggle sections under Settings.)</em></p>
+      <p><em>(Configure under Settings.)</em></p>
       <table>
         <tr><td>Word Count</td><td id="wordCount">…</td></tr>
         <tr><td>Sentence Count*</td><td id="sentenceCount">…</td></tr>
@@ -89,11 +87,8 @@
         <tr><td>Selected Paragraphs</td><td id="selectParagraph">0</td></tr>
       </table>
       <button onclick="refreshSelectionStats()">Count Selection</button>
-      <div class="tooltip">
-        * ends in .!?  &nbsp;&nbsp; ** non-empty normal paragraphs
-      </div>
+      <div class="tooltip">* ends in .!?  ** non-empty normal paragraphs</div>
 
-      <!-- SECTION BREAKDOWN -->
       <div id="section-breakdown">
         <h3>Section Breakdown</h3>
         <table>
@@ -112,7 +107,6 @@
       <button onclick="runWritingTool('professional')">Make Professional</button>
       <button onclick="runWritingTool('concise')">Make Concise</button>
       <hr>
-      <p>Or enter a custom prompt:</p>
       <input type="text" id="geminiPrompt" style="width:80%" placeholder="Your prompt">
       <button onclick="getGeminiResponse()">Send</button>
       <div id="geminiResponse" style="margin-top:10px;"></div>
@@ -142,7 +136,7 @@
           <label for="wordGoal">Expected Word Count:</label><br>
           <input type="number" id="wordGoal" min="1">
         </div>
-        <button type="submit">Save Progress Settings</button>
+        <button type="submit">Save Progress</button>
       </form>
     </div>
 
@@ -161,7 +155,7 @@
           <input type="number" id="topNWordsSetting" min="1">
         </div>
         <div>
-          <label for="topNDisplay">Top-N Display:</label>
+          <label for="topNDisplay">Display Mode:</label>
           <select id="topNDisplay">
             <option value="both">Words & Counts</option>
             <option value="words">Words Only</option>
@@ -169,12 +163,12 @@
           </select>
         </div>
         <div>
-          <label for="customExclusions">Custom Word Exclusions:</label><br>
+          <label for="customExclusions">Custom Exclusions (comma-sep):</label><br>
           <textarea id="customExclusions" rows="2"></textarea>
         </div>
         <div>
-          <label for="fontSize">Font Size (px):</label>
-          <input type="number" id="fontSize" min="10">
+          <label for="fontSize">Font Size (px, ≥15):</label>
+          <input type="number" id="fontSize" min="15">
         </div>
         <div>
           <label for="themeColor">Theme:</label>
@@ -199,53 +193,64 @@
   </div>
 
   <script>
-    // NAVIGATION
-    function showView(id,e) {
+    // --- NAVIGATION ---
+    function showView(id,e){
       e.preventDefault();
       document.querySelectorAll('.navbar a').forEach(a=>a.classList.remove('active'));
-      document.getElementById(id+'-nav').classList.add('active');
+      document.getElementById(id + '-nav').classList.add('active');
       document.querySelectorAll('.view').forEach(v=>{
-        v.id===id+'-view'?v.classList.add('active'):v.classList.remove('active');
+        if(v.id === id + '-view') v.classList.add('active');
+        else                     v.classList.remove('active');
       });
-      if(id==='settings') loadSettings();
-      if(id==='home')    refreshAllStats();
+      if(id === 'settings') loadSettings();
+      if(id === 'home')     refreshAllStats();
     }
 
-    // HOME STATS
+    // --- HOME STATS ---
     function getWordCount(){
-      google.script.run.withSuccessHandler(c=>document.getElementById('wordCount').innerText=c).wordCount();
+      google.script.run.withSuccessHandler(c=>{
+        document.getElementById('wordCount').innerText = c;
+      }).wordCount();
     }
     function getSentenceCount(){
-      google.script.run.withSuccessHandler(c=>document.getElementById('sentenceCount').innerText=c).sentenceCount();
+      google.script.run.withSuccessHandler(c=>{
+        document.getElementById('sentenceCount').innerText = c;
+      }).sentenceCount();
     }
     function getParagraphCount(){
-      google.script.run.withSuccessHandler(c=>document.getElementById('paragraphCount').innerText=c).paragraphCount();
+      google.script.run.withSuccessHandler(c=>{
+        document.getElementById('paragraphCount').innerText = c;
+      }).paragraphCount();
     }
     function getReusedWord(){
       google.script.run.withSuccessHandler(r=>{
-        document.getElementById('reusedWord').innerText=`"${r.maxWord}" (${r.data[r.maxWord]})`;
+        document.getElementById('reusedWord').innerText = `"${r.maxWord}" (${r.data[r.maxWord]})`;
       }).mostReusedWords();
     }
     function getTopNWords(n){
       google.script.run.withSuccessHandler(arr=>{
-        const opt = document.getElementById('topNDisplay').value;
-        let txt = '';
-        if(opt==='both')    txt = arr.map(o=>`${o.word} (${o.count})`).join(', ');
-        else if(opt==='words') txt = arr.map(o=>o.word).join(', ');
-        else if(opt==='counts')txt = arr.map(o=>o.count).join(', ');
-        document.getElementById('topNWords').innerText = txt;
+        const mode = document.getElementById('topNDisplay').value;
+        let text = '';
+        if(mode === 'both')   text = arr.map(o=>`${o.word} (${o.count})`).join(', ');
+        else if(mode==='words') text = arr.map(o=>o.word).join(', ');
+        else if(mode==='counts')text = arr.map(o=>o.count).join(', ');
+        document.getElementById('topNWords').innerText = text;
       }).topFrequentWords(n);
     }
     function refreshAllStats(){
-      getWordCount(); getSentenceCount(); getParagraphCount(); getReusedWord();
+      getWordCount();
+      getSentenceCount();
+      getParagraphCount();
+      getReusedWord();
       const n = parseInt(document.getElementById('topNWordsSetting').value,10) || 1;
       getTopNWords(n);
       google.script.run.withSuccessHandler(secs=>{
-        const tbody=document.getElementById('sectionRows'); tbody.innerHTML='';
+        const tbody = document.getElementById('sectionRows');
+        tbody.innerHTML = '';
         secs.forEach(({title,wordCount})=>{
-          if(!title.trim())return;
-          const tr=document.createElement('tr');
-          tr.innerHTML=`<td>${title}</td><td>${wordCount}</td>`;
+          if(!title.trim()) return;
+          const tr = document.createElement('tr');
+          tr.innerHTML = `<td>${title}</td><td>${wordCount}</td>`;
           tbody.append(tr);
         });
       }).countWordsBySmartSections();
@@ -258,98 +263,105 @@
       }).countWordsSelected();
     }
 
-    // GEMINI (unchanged)
+    // --- GEMINI ---
     function runWritingTool(tool){
-      google.script.run.withSuccessHandler(text=>{
-        const prompts={
-          summarize:'Summarize this text: ',
-          friendly:'Make this text friendly: ',
+      google.script.run.withSuccessHandler(txt=>{
+        const prompts = {
+          summarize:   'Summarize this text: ',
+          friendly:    'Make this text friendly: ',
           professional:'Make this text professional: ',
-          concise:'Make this text concise: '
+          concise:     'Make this text concise: '
         };
         google.script.run.withSuccessHandler(resp=>{
           google.script.run.insertTextAfterSelection(resp);
-        }).callGemini(prompts[tool]+text);
+        }).callGemini(prompts[tool] + txt);
       }).getSelectedText();
     }
     function getGeminiResponse(){
-      const p=document.getElementById('geminiPrompt').value;
-      document.getElementById('geminiResponse').innerText='Loading…';
-      google.script.run.withSuccessHandler(r=>
-        document.getElementById('geminiResponse').innerText=r
-      ).callGemini(p);
+      const p = document.getElementById('geminiPrompt').value;
+      document.getElementById('geminiResponse').innerText = 'Loading…';
+      google.script.run.withSuccessHandler(r=>{
+        document.getElementById('geminiResponse').innerText = r;
+      }).callGemini(p);
     }
 
-    // PROGRESS (unchanged)
+    // --- PROGRESS ---
     function updateExpectedProgress(){
       google.script.run.withSuccessHandler(d=>{
-        const e=document.getElementById('expectedBar');
-        e.style.width=d.percent+'%'; e.innerText=d.percent+'%';
+        const e = document.getElementById('expectedBar');
+        e.style.width = d.percent + '%';
+        e.innerText   = d.percent + '%';
       }).getExpectedProgressData();
     }
     function updateProgress(){
       google.script.run.withSuccessHandler(d=>{
-        const a=document.getElementById('actualBar');
-        a.style.width=d.percent+'%'; a.innerText=d.percent+'%';
+        const a = document.getElementById('actualBar');
+        a.style.width = d.percent + '%';
+        a.innerText   = d.percent + '%';
       }).getProgressData();
     }
     function saveProgressSettingsClient(){
-      const start=document.getElementById('startDate').value,
-            end  =document.getElementById('endDate').value,
-            g    =parseInt(document.getElementById('wordGoal').value,10);
+      const start = document.getElementById('startDate').value,
+            end   = document.getElementById('endDate').value,
+            g     = parseInt(document.getElementById('wordGoal').value,10);
       google.script.run.withSuccessHandler(()=>{
-        updateExpectedProgress(); updateProgress();
+        updateExpectedProgress();
+        updateProgress();
       }).saveProgressSettings(start,end,g);
     }
 
-    // SETTINGS
+    // --- SETTINGS ---
     function loadSettings(){
       google.script.run.withSuccessHandler(s=>{
-        document.getElementById('displayHomeInfo').checked        = s.displayHomeInfo;
-        document.getElementById('showSectionBreakdown').checked  = s.showSectionBreakdown;
-        document.getElementById('topNWordsSetting').value       = s.topNWords;
-        document.getElementById('topNDisplay').value            = s.topNDisplayOption;
+        document.getElementById('displayHomeInfo').checked       = s.displayHomeInfo;
+        document.getElementById('showSectionBreakdown').checked = s.showSectionBreakdown;
+        document.getElementById('topNWordsSetting').value      = s.topNWords;
+        document.getElementById('topNDisplay').value           = s.topNDisplayOption;
         document.getElementById('customExclusions').value      = s.customExclusions;
-        document.getElementById('fontSize').value               = s.fontSize;
-        document.getElementById('themeColor').value             = s.themeColor;
-        document.getElementById('accentColor').value            = s.accentColor;
+        document.getElementById('fontSize').value              = s.fontSize;
+        document.getElementById('themeColor').value            = s.themeColor;
+        document.getElementById('accentColor').value           = s.accentColor;
         applySettings(s);
       }).getSettings();
     }
     function applySettings(s){
-      document.getElementById('home-view').style.display          = s.displayHomeInfo ? '' : 'none';
-      document.getElementById('section-breakdown').style.display  = s.showSectionBreakdown ? '' : 'none';
+      document.getElementById('home-view').style.display         = s.displayHomeInfo ? '' : 'none';
+      document.getElementById('section-breakdown').style.display = s.showSectionBreakdown ? '' : 'none';
       document.body.style.fontSize = s.fontSize + 'px';
       document.body.classList.remove('default-theme','dark-theme','light-theme');
-      document.body.classList.add(s.themeColor + '-theme');
+      document.body.classList.add(s.themeColor+'-theme');
       const map = {
         default:{exp:'#8888ff',act:'#66cc66'},
         blue:   {exp:'#4285F4',act:'#0F9D58'},
         red:    {exp:'#EA4335',act:'#FBBC05'},
         green:  {exp:'#0F9D58',act:'#34A853'}
-      }[s.accentColor] || map.default;
-      document.documentElement.style.setProperty('--expected-color', map.exp);
-      document.documentElement.style.setProperty('--actual-color',   map.act);
+      }[s.accentColor] || {exp:'#8888ff',act:'#66cc66'};
+      document.documentElement.style.setProperty('--expected-color',map.exp);
+      document.documentElement.style.setProperty('--actual-color',map.act);
     }
     function saveSettings(){
-      const f=document.getElementById('settingsForm');
-      const s={
-        displayHomeInfo:      f.displayHomeInfo.checked,
-        showSectionBreakdown: f.showSectionBreakdown.checked,
-        topNWords:            parseInt(f.topNWordsSetting.value,10),
-        topNDisplayOption:    f.topNDisplay.value,
-        customExclusions:     f.customExclusions.value,
-        fontSize:             parseInt(f.fontSize.value,10),
-        themeColor:           f.themeColor.value,
-        accentColor:          f.accentColor.value
+      let fs = parseInt(document.getElementById('fontSize').value,10);
+      if(isNaN(fs)||fs<15) fs=15;
+
+      const s = {
+        displayHomeInfo:      document.getElementById('displayHomeInfo').checked,
+        showSectionBreakdown: document.getElementById('showSectionBreakdown').checked,
+        topNWords:            parseInt(document.getElementById('topNWordsSetting').value,10)||3,
+        topNDisplayOption:    document.getElementById('topNDisplay').value,
+        customExclusions:     document.getElementById('customExclusions').value.trim(),
+        fontSize:             fs,
+        themeColor:           document.getElementById('themeColor').value,
+        accentColor:          document.getElementById('accentColor').value
       };
       google.script.run.withSuccessHandler(msg=>{
         alert(msg);
-        google.script.run.showSidebar();
+        // Switch back to Home and refresh stats:
+        showView('home', new Event('init'));
+        refreshAllStats();
       }).saveSettings(s);
     }
 
-    // INITIALIZE
+    // Initialize
     document.addEventListener('DOMContentLoaded',()=>{
       showView('home',new Event('init'));
       loadSettings();

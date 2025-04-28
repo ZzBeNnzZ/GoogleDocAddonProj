@@ -1,118 +1,88 @@
-
 function wordCount() {
-  const doc = DocumentApp.getActiveDocument();
-  const body = doc.getBody();
-  const paragraphs = body.getParagraphs();
-
-  let text = '';
-  paragraphs.forEach(p => {
-    if (p.getHeading() === DocumentApp.ParagraphHeading.NORMAL) {
-      text += p.getText() + ' ';
-    }
-  });
-  text = text.trim();
-
-  const words = text.match(/\b\w+\b/g);
-  const count = words ? words.length : 0;
-  // adjust if needed
-  const trueCount = Math.max(0, count - 1);
-  return trueCount;
-}
-
-function sentenceCount() {
-  const doc = DocumentApp.getActiveDocument();
-  const body = doc.getBody();
-  const paragraphs = body.getParagraphs();
-
-  let text = '';
-  paragraphs.forEach(p => {
-    if (p.getHeading() === DocumentApp.ParagraphHeading.NORMAL) {
-      text += p.getText() + ' ';
-    }
-  });
-  text = text.trim();
-
-  const sentences = text.match(/[^.!?]+[.!?]+(\s|$)/g);
-  const count = sentences ? sentences.length : 0;
-  const trueCount = Math.max(0, count - 1);
-  return trueCount;
-}
-
-function paragraphCount() {
-  const doc = DocumentApp.getActiveDocument();
-  const body = doc.getBody();
-  const paragraphs = body.getParagraphs();
-
-  const nonEmpty = paragraphs.filter(p =>
-    p.getText().trim().length > 0 &&
-    p.getHeading() === DocumentApp.ParagraphHeading.NORMAL
-  );
-  return nonEmpty.length;
-}
-
-function mostReusedWords() {
-  const doc = DocumentApp.getActiveDocument();
-  const paragraphs = doc.getBody().getParagraphs();
-
-  let text = '';
-  paragraphs.forEach(p => {
-    if (p.getHeading() === DocumentApp.ParagraphHeading.NORMAL) {
-      text += p.getText() + ' ';
-    }
-  });
-  text = text.trim();
-
-  const words = text.match(/\b\w+\b/g) || [];
-  const stats = {};
-  let maxWord = '', maxCount = 0;
-  words.forEach(w => {
-    const lw = w.toLowerCase();
-    stats[lw] = (stats[lw] || 0) + 1;
-    if (stats[lw] > maxCount) {
-      maxCount = stats[lw];
-      maxWord = lw;
-    }
-  });
-
-  return { maxWord: maxWord, data: stats };
-}
-
-/**
- * Returns the top-n most frequent normal-text words,
- * excluding any in the user-defined exclusion list.
- *
- * @param {number} n  Number of top words to return.
- * @returns {Array<{word:string,count:number}>}
- */
-function topFrequentWords(n) {
-  // load exclusions
-  const props = PropertiesService.getUserProperties().getProperties();
-  const exclStr = props.customExclusions || '';
-  const exclusions = exclStr
-    .split(',')
-    .map(s => s.trim().toLowerCase())
-    .filter(s => s);
-
-  // gather normal text
   const paras = DocumentApp.getActiveDocument()
     .getBody()
     .getParagraphs()
-    .filter(p => p.getHeading() === DocumentApp.ParagraphHeading.NORMAL);
-
-  const text = paras.map(p => p.getText()).join(' ').trim();
-  const words = text.match(/\b\w+\b/g) || [];
-
-  // count, skipping exclusions
-  const counts = {};
-  words.forEach(w => {
-    const lw = w.toLowerCase();
-    if (exclusions.includes(lw)) return;
-    counts[lw] = (counts[lw] || 0) + 1;
-  });
-
-  // sort + slice
-  return Object.keys(counts)
-    .sort((a, b) => counts[b] - counts[a])
-    .slice(0, n)
-    .map(w => ({ word: w, count: counts[w] }));
+    .filter(p=>p.getHeading()===DocumentApp.ParagraphHeading.NORMAL);
+  const text = paras.map(p=>p.getText()).join(' ');
+  const words = text.match(/\b\w+\b/g)||[];
+  return Math.max(0, words.length-1);
 }
+
+function sentenceCount() {
+  const paras = DocumentApp.getActiveDocument()
+    .getBody()
+    .getParagraphs()
+    .filter(p=>p.getHeading()===DocumentApp.ParagraphHeading.NORMAL);
+  const text = paras.map(p=>p.getText()).join(' ');
+  const sents = text.match(/[^.!?]+[.!?]+(\s|$)/g)||[];
+  return Math.max(0, sents.length-1);
+}
+
+function paragraphCount() {
+  const paras = DocumentApp.getActiveDocument()
+    .getBody()
+    .getParagraphs()
+    .filter(p=>p.getHeading()===DocumentApp.ParagraphHeading.NORMAL && p.getText().trim().length>0);
+  return paras.length;
+}
+
+function mostReusedWords() {
+  const paras = DocumentApp.getActiveDocument()
+    .getBody()
+    .getParagraphs()
+    .filter(p=>p.getHeading()===DocumentApp.ParagraphHeading.NORMAL);
+  const text = paras.map(p=>p.getText()).join(' ');
+  const words = (text.match(/\b\w+\b/g)||[]).map(w=>w.toLowerCase());
+  const stats = {};
+  let maxWord='', maxCount=0;
+  words.forEach(w=>{
+    stats[w]=(stats[w]||0)+1;
+    if(stats[w]>maxCount){
+      maxCount=stats[w];
+      maxWord=w;
+    }
+  });
+  return { maxWord, data: stats };
+}
+
+function countWordsBySmartSections() {
+  const body = DocumentApp.getActiveDocument().getBody();
+  const paras = body.getParagraphs();
+  const sections = new Map();
+  let key = 'Uncategorized';
+  paras.forEach(p=>{
+    const txt = p.getText().trim();
+    if(p.getHeading()!==DocumentApp.ParagraphHeading.NORMAL && txt) {
+      key = txt; return;
+    }
+    const clean = txt.replace(/^\s*[\dIVX]+\s*[.)]\s+|^\s*[•\-–]\s+/, '');
+    sections.set(key,(sections.get(key)||'')+' '+clean);
+  });
+  const out=[];
+  sections.forEach((txt,title)=>{
+    const count = (txt.match(/\b\w+\b/g)||[]).length;
+    out.push({ title, wordCount: count });
+  });
+  return out;
+}
+
+function topFrequentWords(n) {
+  const p = PropertiesService.getUserProperties().getProperties();
+  const excl = (p.customExclusions||'')
+    .split(',').map(s=>s.trim().toLowerCase()).filter(Boolean);
+  const paras = DocumentApp.getActiveDocument()
+    .getBody()
+    .getParagraphs()
+    .filter(p=>p.getHeading()===DocumentApp.ParagraphHeading.NORMAL);
+  const words = (paras.map(p=>p.getText()).join(' ').match(/\b\w+\b/g)||[])
+    .map(w=>w.toLowerCase())
+    .filter(w=>!excl.includes(w));
+  const counts = {};
+  words.forEach(w=>counts[w]=(counts[w]||0)+1);
+  return Object.keys(counts)
+    .sort((a,b)=>counts[b]-counts[a])
+    .slice(0,n)
+    .map(w=>({ word: w, count: counts[w] }));
+}
+
+// … your existing countWordsSelected, callGemini, progress functions …

@@ -1,18 +1,18 @@
-
-var Settings = (function() {
-  var defaultSettings = {
+var Settings = (function(){
+  const defaultSettings = {
     displayHomeInfo:        true,
     showSectionBreakdown:   true,
+    sidebarWidth:           600,
     fontSize:               14,
     themeColor:             'default',
+    accentColor:            'default',
     topNWords:              3,
     topNDisplayOption:      'both',
-    accentColor:            'default',
     customExclusions:       ''
   };
 
-  function getSettings() {
-    var p = PropertiesService.getUserProperties().getProperties();
+  function getSettings(){
+    const p = PropertiesService.getUserProperties().getProperties();
     if (!p || Object.keys(p).length === 0) {
       setSettings(defaultSettings);
       return defaultSettings;
@@ -20,21 +20,20 @@ var Settings = (function() {
     return {
       displayHomeInfo:      p.displayHomeInfo === 'true',
       showSectionBreakdown: p.showSectionBreakdown === 'true',
-      fontSize:             parseInt(p.fontSize, 10),
-      themeColor:           p.themeColor,
-      topNWords:            parseInt(p.topNWords, 10),
-      topNDisplayOption:    p.topNDisplayOption || 'both',
-      accentColor:          p.accentColor,
-      customExclusions:     p.customExclusions || ''
+      sidebarWidth:         parseInt(p.sidebarWidth,10)  || defaultSettings.sidebarWidth,
+      fontSize:             parseInt(p.fontSize,10)      || defaultSettings.fontSize,
+      themeColor:           p.themeColor                 || defaultSettings.themeColor,
+      accentColor:          p.accentColor                || defaultSettings.accentColor,
+      topNWords:            parseInt(p.topNWords,10)     || defaultSettings.topNWords,
+      topNDisplayOption:    p.topNDisplayOption          || defaultSettings.topNDisplayOption,
+      customExclusions:     p.customExclusions           || ''
     };
   }
 
-  function setSettings(s) {
-    var props = {};
-    Object.keys(s).forEach(function(k) {
-      var v = s[k];
-      // if null or undefined, store as empty string
-      props[k] = (v === null || v === undefined) ? '' : v.toString();
+  function setSettings(s){
+    const props = {};
+    Object.keys(defaultSettings).forEach(k => {
+      props[k] = (s[k]===null||s[k]===undefined) ? '' : s[k].toString();
     });
     PropertiesService.getUserProperties().setProperties(props);
   }
