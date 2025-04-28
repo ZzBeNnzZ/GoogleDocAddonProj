@@ -31,7 +31,11 @@ var Settings = (function() {
 
   function setSettings(s) {
     var props = {};
-    for (var k in s) props[k] = s[k].toString();
+    Object.keys(s).forEach(function(k) {
+      var v = s[k];
+      // if null or undefined, store as empty string
+      props[k] = (v === null || v === undefined) ? '' : v.toString();
+    });
     PropertiesService.getUserProperties().setProperties(props);
   }
 
